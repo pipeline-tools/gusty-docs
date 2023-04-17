@@ -70,9 +70,9 @@ operator: airflow.operators.bash.BashOperator
 bash_command: echo hello
 ```
 
-Because the entire file is YAML, there is no separation of Frontmatter and Body.
-
 The resulting task would contain a `BashOperator` with the task id `hello`.
+
+Because the entire file is YAML, there is no separation of Frontmatter and Body.
 
 ### SQL Files with `hey.sql` {.unnumbered}
 
