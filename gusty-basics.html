@@ -20,6 +20,69 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -107,7 +170,19 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#gusty-dag-structure" id="toc-gusty-dag-structure" class="nav-link active" data-scroll-target="#gusty-dag-structure"><span class="toc-section-number">1.1</span>  gusty DAG Structure</a></li>
+  <li><a href="#task-definition-files" id="toc-task-definition-files" class="nav-link" data-scroll-target="#task-definition-files"><span class="toc-section-number">1.2</span>  Task Definition Files</a>
+  <ul class="collapse">
+  <li><a href="#yaml-files-with-hello.yml" id="toc-yaml-files-with-hello.yml" class="nav-link" data-scroll-target="#yaml-files-with-hello.yml">YAML Files with <code>hello.yml</code></a></li>
+  <li><a href="#sql-files-with-hey.sql" id="toc-sql-files-with-hey.sql" class="nav-link" data-scroll-target="#sql-files-with-hey.sql">SQL Files with <code>hey.sql</code></a></li>
+  <li><a href="#python-files-with-hi.py" id="toc-python-files-with-hi.py" class="nav-link" data-scroll-target="#python-files-with-hi.py">Python Files with <code>hi.py</code></a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -129,9 +204,91 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>Check out the <a href="https://github.com/chriscardillo/gusty">gusty README</a> for now!</p>
+<p>To familiarize ourselved with gusty, we’ll start by making a simple DAG, called <code>hello_dag</code>.</p>
+<section id="gusty-dag-structure" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="gusty-dag-structure"><span class="header-section-number">1.1</span> gusty DAG Structure</h2>
+<p>A gusty DAG lives inside of your Airflow DAGs folder (by default <code>$AIRFLOW_HOME/dags</code>), and is comprised of a few core elements:</p>
+<ol type="1">
+<li><p><strong>Task Definition Files</strong> - Each file hold specifications for a given task. In the example below, <code>hi.py</code>, <code>hey.sql</code>, and <code>hello.yml</code> are our Task Definition Files. These Task Definition Files are all stored inside our <code>hello_dag</code> folder.</p></li>
+<li><p><strong>METADATA.yml</strong> - This optional file contains any argument that could be passed to <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG">Airflow’s DAG object</a>, as well as some optional gusty-specifc argument. In the example below, <code>METADATA.yml</code> is stored inside of our <code>hello_dag</code> folder, alongside the Task Definition Files.</p></li>
+<li><p><strong>DAG File</strong> - The file that turns a gusty DAG folder into an Airflow DAG. It’s more or less like any other Airflow DAG file, and it will contain gusty’s <code>create_dag</code> function. In the example below, <code>hello_dag.py</code> is our DAG Generation File. The DAG Generation File does <em>not</em> need to be named identically to the DAG folder.</p></li>
+</ol>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">$AIRFLOW_HOME</span><span class="ex">/dags/</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> hello_dag/</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   ├── METADATA.yml</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   ├── hi.py</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   ├── hey.sql</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   └── hello.yml</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="ex">└──</span> hello_dag.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In the event you wanted to create a second gusty DAG, you can just repeat this pattern. For example, if we wanted to add <code>goodbye_dag</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">$AIRFLOW_HOME</span><span class="ex">/dags/</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> goodbye_dag/</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   ├── METADATA.yml</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   ├── bye.py</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   ├── later.sql</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   └── goodbye.yml</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> hello_dag/</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   ├── METADATA.yml</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   ├── hi.py</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   ├── hey.sql</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   └── hello.yml</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> goodbye_dag.py</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="ex">└──</span> hello_dag.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<hr>
+</section>
+<section id="task-definition-files" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="task-definition-files"><span class="header-section-number">1.2</span> Task Definition Files</h2>
+<p>The three primary file types used for Task Definition Files are Python, SQL, and YAML. gusty supports other file types, but these three are the most commonly used. The general pattern for Task Definition files is that they contain:</p>
+<ul>
+<li><p><strong>Frontmatter</strong> - YAML which carries the specification and parameterization for the task. This can include which Airflow (or custom) operator to use, any keyword arguments to be passed to that operator, and any task dependencies the given task may have.</p></li>
+<li><p><strong>Body</strong> - The primary contents of the task. For example, the Body of a SQL file is the SQL statement which will be executed; the body of a Python file can be the <code>python_callable</code> that will be ran by the operator. For YAML files, there is no Body because the whole Task Definition File is YAML.</p></li>
+</ul>
+<p>gusty will pass any argument that can be passed to the <code>operator</code> specified (as well as any <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/baseoperator/index.html#airflow.models.baseoperator.BaseOperatorMeta">BaseOperator</a> arguments) to the operator. The specified <code>operator</code> should be a full path to that operator.</p>
+<p>The file name of each Task Definition File will become the name of the Airflow task.</p>
+<p>Let’s explore these different file types by looking at the contents of these Task Definition Files in <code>hello_dag</code>.</p>
+<section id="yaml-files-with-hello.yml" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="yaml-files-with-hello.yml">YAML Files with <code>hello.yml</code></h3>
+<p>Here are the contents of our <code>hello.yml</code> file:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">operator</span><span class="kw">:</span><span class="at"> airflow.operators.bash.BashOperator</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bash_command</span><span class="kw">:</span><span class="at"> echo hello</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Because the entire file is YAML, there is no separation of Frontmatter and Body.</p>
+<p>The resulting task would contain a <code>BashOperator</code> with the task id <code>hello</code>.</p>
+</section>
+<section id="sql-files-with-hey.sql" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="sql-files-with-hey.sql">SQL Files with <code>hey.sql</code></h3>
+<p>Here are the contents of our <code>hey.sql</code> file:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">operator</span>: airflow.providers.sqlite.operators.sqlite.SqliteOperator</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="st">'hey'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The resulting task would contain a <code>SqliteOperator</code> with the task id <code>hey</code>.</p>
+<p>The Frontmatter of our SQL file is encased in a set of triple dashes (<code>---</code>). The Body of the file is everything below the second set of triple dashes. For SQL files, the Body of the file is passed to the <code>sql</code> argument of the underlying operator. In this case, <code>SELECT 'hey'</code> would be passed to the <code>sql</code> argument.</p>
+</section>
+<section id="python-files-with-hi.py" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="python-files-with-hi.py">Python Files with <code>hi.py</code></h3>
+<p>Here are the contents of our <code>hi.py</code> file:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode py code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># python_callable: say_hi</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ---</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> say_hi():</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  phrase <span class="op">=</span> <span class="st">"hi"</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(phrase)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> phrase</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The resulting task would contain a <code>PythonOperator</code> with the task id <code>hi</code>.</p>
+<p>The Frontmatter of our Python file is also encased in a set of triple dashes (<code>---</code>), but you will also note that the entirety of the Frontmatter, including the triple dashes, are prefixed by comment hashes (<code>#</code>).</p>
+<p>By default, gusty will specify specify Airflow’s <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/operators/python/index.html#airflow.operators.python.PythonOperator">PythonOperator</a> as the <code>operator</code>, if no <code>operator</code> argument is provided. As with any Task Definition File, you can specify whatever <code>operator</code> is available to you in your Airflow environment, so you could just as easily add <code>operator: airflow.operators.python.PythonVirtualenvOperator</code> to this Frontmatter to use the <code>PythonVirtualenvOperator</code> instead of the <code>PythonOperator</code>.</p>
+<p>When a <code>python_callable</code> is specified in the Frontmatter of a Python file, gusty will search the Body of the Python file for a function with the name specified in the Frontmatter’s <code>python_callable</code> argument. For the best results with Python files, it’s recommended that you put all of the Body contents in a named function, as illustrated above.</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
