@@ -112,3 +112,39 @@ The Frontmatter of our Python file is also encased in a set of triple dashes (`-
 By default, gusty will specify specify Airflow's [PythonOperator](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/operators/python/index.html#airflow.operators.python.PythonOperator) as the `operator`, if no `operator` argument is provided. As with any Task Definition File, you can specify whatever `operator` is available to you in your Airflow environment, so you could just as easily add `operator: airflow.operators.python.PythonVirtualenvOperator` to this Frontmatter to use the `PythonVirtualenvOperator` instead of the `PythonOperator`.
 
 When a `python_callable` is specified in the Frontmatter of a Python file, gusty will search the Body of the Python file for a function with the name specified in the Frontmatter's `python_callable` argument. For the best results with Python files, it's recommended that you put all of the Body contents in a named function, as illustrated above.
+
+## METADATA.yml
+
+The `METADATA.yml` file is a special file for passing DAG-related arguments to [Airflow's DAG object](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG). Airflow's DAG object takes arguments like `schedule` (when you want your DAG to run), `default_args.start_date` (how far back you want your DAG to start), `default_args.email` (who should be notified if a task in DAG fails), and more. The `METADATA.yml` file is a convenient way to pass this information to Airflow.
+
+Let's look at the contents of the `METADATA.yml` file in our `hello_dag` folder:
+
+```yaml
+description: "Saying hello using different file types"
+doc_md: |-
+  This is a longform description,
+  which can be accessed from Airflow's
+  Graph view for your DAG. It looks
+  like a tiny poem.
+schedule: "0 * * * *"
+catchup: False
+default_args:
+    owner: You
+    email: you@you.com
+    start_date: !days_ago 28
+    email_on_failure: True
+    email_on_retry: False
+    retries: 1
+    retry_delay: !timedelta 
+      minutes: 5
+tags:
+  - docs
+  - demo
+  - hello
+```
+
+The above `METADATA.yml` configures a DAG that runs once a day (`schedule: "0 * * * *"`), has a start date of 28 days ago (`default_args.start_date: !days_ago 28`), and is tagged with the tags `docs`, `demo`, and `hello`. It also adds a `description`, a `doc_md`, and more, but every argument here is simply an argument in [Airflow's DAG object](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG).
+
+The only thing that you might not have seen before are *YAML constructors*, as illustrated above in the `default_args.start_date` (using `!days_ago`) and `default_args.retry_delay` (using `!timedelta`) arguments, which are calling *functions* inside of YAML. In short, YAML constructors are just Python functions that are called when your YAML (or any Task Definition File Frontmatter) is loaded. We'll discuss YAML constructors more in later sections, but they are a powerful way to control FaaT DAGs, and help ensure you have just as much control over your DAGs as writing them any other way.
+
+We'll also cover gusty-specific `METADATA.yml` later on, but for now, all you need to know is that the `METADATA.yml` file is used for passing arguments to [Airflow's DAG object](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG).
