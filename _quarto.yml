@@ -2,16 +2,12 @@ project:
   type: book
 
 book:
-  title: "gusty-docs"
-  author: "Jane Doe"
+  title: "gusty"
+  author: "Chris Cardillo"
   date: "4/17/2023"
   chapters:
     - index.qmd
-    - intro.qmd
-    - summary.qmd
-    - references.qmd
-
-bibliography: references.bib
+    - gusty-basics.qmd
 
 format:
   html:
