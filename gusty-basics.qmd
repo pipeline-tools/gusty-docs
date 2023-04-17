@@ -1,3 +1,114 @@
 # gusty Basics
 
-Check out the [gusty README](https://github.com/chriscardillo/gusty) for now!
+To familiarize ourselved with gusty, we'll start by making a simple DAG, called `hello_dag`.
+
+## gusty DAG Structure
+
+A gusty DAG lives inside of your Airflow DAGs folder (by default `$AIRFLOW_HOME/dags`), and is comprised of a few core elements:
+
+1. **Task Definition Files** - Each file hold specifications for a given task. In the example below, `hi.py`, `hey.sql`, and `hello.yml` are our Task Definition Files. These Task Definition Files are all stored inside our `hello_dag` folder.
+
+2. **METADATA.yml** - This optional file contains any argument that could be passed to [Airflow's DAG object](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG), as well as some optional gusty-specifc argument. In the example below, `METADATA.yml` is stored inside of our `hello_dag` folder, alongside the Task Definition Files.
+
+3. **DAG File** - The file that turns a gusty DAG folder into an Airflow DAG. It's more or less like any other Airflow DAG file, and it will contain gusty's `create_dag` function. In the example below, `hello_dag.py` is our DAG Generation File. The DAG Generation File does *not* need to be named identically to the DAG folder.
+
+```sh
+$AIRFLOW_HOME/dags/
+│
+├── hello_dag/
+│   ├── METADATA.yml
+│   ├── hi.py
+│   ├── hey.sql
+│   └── hello.yml
+│
+└── hello_dag.py
+```
+
+In the event you wanted to create a second gusty DAG, you can just repeat this pattern. For example, if we wanted to add `goodbye_dag`:
+
+```sh
+$AIRFLOW_HOME/dags/
+│
+├── goodbye_dag/
+│   ├── METADATA.yml
+│   ├── bye.py
+│   ├── later.sql
+│   └── goodbye.yml
+|
+├── hello_dag/
+│   ├── METADATA.yml
+│   ├── hi.py
+│   ├── hey.sql
+│   └── hello.yml
+│
+├── goodbye_dag.py
+└── hello_dag.py
+```
+
+---
+
+## Task Definition Files
+
+The three primary file types used for Task Definition Files are Python, SQL, and YAML. gusty supports other file types, but these three are the most commonly used. The general pattern for Task Definition files is that they contain:
+
+- **Frontmatter** - YAML which carries the specification and parameterization for the task. This can include which Airflow (or custom) operator to use, any keyword arguments to be passed to that operator, and any task dependencies the given task may have. 
+
+- **Body** - The primary contents of the task. For example, the Body of a SQL file is the SQL statement which will be executed; the body of a Python file can be the `python_callable` that will be ran by the operator. For YAML files, there is no Body because the whole Task Definition File is YAML.
+
+gusty will pass any argument that can be passed to the `operator` specified (as well as any [BaseOperator](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/baseoperator/index.html#airflow.models.baseoperator.BaseOperatorMeta) arguments) to the operator. The specified `operator` should be a full path to that operator.
+
+The file name of each Task Definition File will become the name of the Airflow task.
+
+Let's explore these different file types by looking at the contents of these Task Definition Files in `hello_dag`.
+
+### YAML Files with `hello.yml` {.unnumbered}
+
+Here are the contents of our `hello.yml` file:
+
+```yaml
+operator: airflow.operators.bash.BashOperator
+bash_command: echo hello
+```
+
+Because the entire file is YAML, there is no separation of Frontmatter and Body.
+
+The resulting task would contain a `BashOperator` with the task id `hello`.
+
+### SQL Files with `hey.sql` {.unnumbered}
+
+Here are the contents of our `hey.sql` file:
+
+```sql
+---
+operator: airflow.providers.sqlite.operators.sqlite.SqliteOperator
+---
+
+SELECT 'hey'
+```
+
+The resulting task would contain a `SqliteOperator` with the task id `hey`.
+
+The Frontmatter of our SQL file is encased in a set of triple dashes (`---`). The Body of the file is everything below the second set of triple dashes. For SQL files, the Body of the file is passed to the `sql` argument of the underlying operator. In this case, `SELECT 'hey'` would be passed to the `sql` argument.
+
+### Python Files with `hi.py` {.unnumbered}
+
+Here are the contents of our `hi.py` file:
+
+```py
+# ---
+# python_callable: say_hi
+# ---
+
+def say_hi():
+  phrase = "hi"
+  print(phrase)
+  return phrase
+```
+
+The resulting task would contain a `PythonOperator` with the task id `hi`.
+
+The Frontmatter of our Python file is also encased in a set of triple dashes (`---`), but you will also note that the entirety of the Frontmatter, including the triple dashes, are prefixed by comment hashes (`#`).
+
+By default, gusty will specify specify Airflow's [PythonOperator](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/operators/python/index.html#airflow.operators.python.PythonOperator) as the `operator`, if no `operator` argument is provided. As with any Task Definition File, you can specify whatever `operator` is available to you in your Airflow environment, so you could just as easily add `operator: airflow.operators.python.PythonVirtualenvOperator` to this Frontmatter to use the `PythonVirtualenvOperator` instead of the `PythonOperator`.
+
+When a `python_callable` is specified in the Frontmatter of a Python file, gusty will search the Body of the Python file for a function with the name specified in the Frontmatter's `python_callable` argument. For the best results with Python files, it's recommended that you put all of the Body contents in a named function, as illustrated above.
