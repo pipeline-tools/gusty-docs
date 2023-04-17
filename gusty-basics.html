@@ -181,6 +181,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#sql-files-with-hey.sql" id="toc-sql-files-with-hey.sql" class="nav-link" data-scroll-target="#sql-files-with-hey.sql">SQL Files with <code>hey.sql</code></a></li>
   <li><a href="#python-files-with-hi.py" id="toc-python-files-with-hi.py" class="nav-link" data-scroll-target="#python-files-with-hi.py">Python Files with <code>hi.py</code></a></li>
   </ul></li>
+  <li><a href="#metadata.yml" id="toc-metadata.yml" class="nav-link" data-scroll-target="#metadata.yml"><span class="toc-section-number">1.3</span>  METADATA.yml</a></li>
   </ul>
 </nav>
     </div>
@@ -285,9 +286,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The Frontmatter of our Python file is also encased in a set of triple dashes (<code>---</code>), but you will also note that the entirety of the Frontmatter, including the triple dashes, are prefixed by comment hashes (<code>#</code>).</p>
 <p>By default, gusty will specify specify Airflow’s <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/operators/python/index.html#airflow.operators.python.PythonOperator">PythonOperator</a> as the <code>operator</code>, if no <code>operator</code> argument is provided. As with any Task Definition File, you can specify whatever <code>operator</code> is available to you in your Airflow environment, so you could just as easily add <code>operator: airflow.operators.python.PythonVirtualenvOperator</code> to this Frontmatter to use the <code>PythonVirtualenvOperator</code> instead of the <code>PythonOperator</code>.</p>
 <p>When a <code>python_callable</code> is specified in the Frontmatter of a Python file, gusty will search the Body of the Python file for a function with the name specified in the Frontmatter’s <code>python_callable</code> argument. For the best results with Python files, it’s recommended that you put all of the Body contents in a named function, as illustrated above.</p>
-
-
 </section>
+</section>
+<section id="metadata.yml" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="metadata.yml"><span class="header-section-number">1.3</span> METADATA.yml</h2>
+<p>The <code>METADATA.yml</code> file is a special file for passing DAG-related arguments to <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG">Airflow’s DAG object</a>. Airflow’s DAG object takes arguments like <code>schedule</code> (when you want your DAG to run), <code>default_args.start_date</code> (how far back you want your DAG to start), <code>default_args.email</code> (who should be notified if a task in DAG fails), and more. The <code>METADATA.yml</code> file is a convenient way to pass this information to Airflow.</p>
+<p>Let’s look at the contents of the <code>METADATA.yml</code> file in our <code>hello_dag</code> folder:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"Saying hello using different file types"</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">doc_md</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  This is a longform description,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  which can be accessed from Airflow's</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  Graph view for your DAG. It looks</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  like a tiny poem.</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">schedule</span><span class="kw">:</span><span class="at"> </span><span class="st">"0 * * * *"</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">catchup</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">default_args</span><span class="kw">:</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">owner</span><span class="kw">:</span><span class="at"> You</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">email</span><span class="kw">:</span><span class="at"> you@you.com</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">start_date</span><span class="kw">:</span><span class="at"> !days_ago 28</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">email_on_failure</span><span class="kw">:</span><span class="at"> </span><span class="ch">True</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">email_on_retry</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">retries</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">retry_delay</span><span class="kw">:</span><span class="at"> !timedelta </span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">minutes</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="fu">tags</span><span class="kw">:</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> docs</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> demo</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> hello</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The above <code>METADATA.yml</code> configures a DAG that runs once a day (<code>schedule: "0 * * * *"</code>), has a start date of 28 days ago (<code>default_args.start_date: !days_ago 28</code>), and is tagged with the tags <code>docs</code>, <code>demo</code>, and <code>hello</code>. It also adds a <code>description</code>, a <code>doc_md</code>, and more, but every argument here is simply an argument in <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG">Airflow’s DAG object</a>.</p>
+<p>The only thing that you might not have seen before are <em>YAML constructors</em>, as illustrated above in the <code>default_args.start_date</code> (using <code>!days_ago</code>) and <code>default_args.retry_delay</code> (using <code>!timedelta</code>) arguments, which are calling <em>functions</em> inside of YAML. In short, YAML constructors are just Python functions that are called when your YAML (or any Task Definition File Frontmatter) is loaded. We’ll discuss YAML constructors more in later sections, but they are a powerful way to control FaaT DAGs, and help ensure you have just as much control over your DAGs as writing them any other way.</p>
+<p>We’ll also cover gusty-specific <code>METADATA.yml</code> later on, but for now, all you need to know is that the <code>METADATA.yml</code> file is used for passing arguments to <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG">Airflow’s DAG object</a>.</p>
+
+
 </section>
 
 </main> <!-- /main -->
