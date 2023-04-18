@@ -3,6 +3,7 @@ project:
 
 book:
   title: ""
+  favicon: media/logo/favicon.png
   # author: "Chris Cardillo"
   # date: "4/17/2023"
   sidebar: 
