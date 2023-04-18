@@ -17,6 +17,7 @@ book:
       chapters:
         - gusty-basics.qmd
         - task-dependencies.qmd
+        - task-groups.qmd
 format:
   html:
     theme: materia
