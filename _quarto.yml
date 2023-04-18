@@ -4,13 +4,13 @@ project:
 book:
   title: ""
   favicon: media/logo/favicon.png
-  # author: "Chris Cardillo"
-  # date: "4/17/2023"
+  navbar:
+    pinned: TRUE
+    right: 
+      - icon: github
+        href: https://github.com/chriscardillo/gusty
   sidebar: 
     logo: media/logo/logo_500.svg
-    tools:
-    - icon: github
-      href: https://github.com/chriscardillo/gusty
   chapters:
     - index.qmd
     - part: "Getting Started"
