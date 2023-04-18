@@ -7,8 +7,10 @@ book:
   date: "4/17/2023"
   chapters:
     - index.qmd
-    - gusty-basics.qmd
-
+    - part: "Getting Started"
+      chapters:
+        - gusty-basics.qmd
+        - task-dependencies.qmd
 format:
   html:
     theme: materia

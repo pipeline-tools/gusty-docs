@@ -1,4 +1,7 @@
-# gusty Basics
+---
+title: Basic DAG Structure
+number-depth: 2
+---
 
 To familiarize ourselved with gusty, we'll start by making a simple DAG, called `hello_dag`.
 
@@ -61,7 +64,7 @@ The file name of each Task Definition File will become the name of the Airflow t
 
 Let's explore these different file types by looking at the contents of these Task Definition Files in `hello_dag`.
 
-### YAML Files with `hello.yml` {.unnumbered}
+### YAML Files with `hello.yml`
 
 Here are the contents of our `hello.yml` file:
 
@@ -74,7 +77,7 @@ The resulting task would contain a `BashOperator` with the task id `hello`.
 
 Because the entire file is YAML, there is no separation of Frontmatter and Body.
 
-### SQL Files with `hey.sql` {.unnumbered}
+### SQL Files with `hey.sql`
 
 Here are the contents of our `hey.sql` file:
 
@@ -90,7 +93,7 @@ The resulting task would contain a `SqliteOperator` with the task id `hey`.
 
 The Frontmatter of our SQL file is encased in a set of triple dashes (`---`). The Body of the file is everything below the second set of triple dashes. For SQL files, the Body of the file is passed to the `sql` argument of the underlying operator. In this case, `SELECT 'hey'` would be passed to the `sql` argument.
 
-### Python Files with `hi.py` {.unnumbered}
+### Python Files with `hi.py`
 
 Here are the contents of our `hi.py` file:
 
@@ -126,7 +129,7 @@ doc_md: |-
   which can be accessed from Airflow's
   Graph view for your DAG. It looks
   like a tiny poem.
-schedule: "0 * * * *"
+schedule: "0 0 * * *"
 catchup: False
 default_args:
     owner: You
@@ -143,7 +146,7 @@ tags:
   - hello
 ```
 
-The above `METADATA.yml` configures a DAG that runs once a day (`schedule: "0 * * * *"`), has a start date of 28 days ago (`default_args.start_date: !days_ago 28`), and is tagged with the tags `docs`, `demo`, and `hello`. It also adds a `description`, a `doc_md`, and more, but every argument here is simply an argument in [Airflow's DAG object](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG).
+The above `METADATA.yml` configures a DAG that runs once a day (`schedule: "0 0 * * *"`), has a start date of 28 days ago (`default_args.start_date: !days_ago 28`), and is tagged with the tags `docs`, `demo`, and `hello`. It also adds a `description`, a `doc_md`, and more, but every argument here is simply an argument in [Airflow's DAG object](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG).
 
 The only thing that you might not have seen before are *YAML constructors*, as illustrated above in the `default_args.start_date` (using `!days_ago`) and `default_args.retry_delay` (using `!timedelta`) arguments, which are calling *functions* inside of YAML. In short, YAML constructors are just Python functions that are called when your YAML (or any Task Definition File Frontmatter) is loaded. We'll discuss YAML constructors more in later sections, but they are a powerful way to control File-oriented DAGs and tasks, and help ensure you have just as much control over your DAGs as writing them any other way.
 
