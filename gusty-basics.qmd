@@ -148,3 +148,29 @@ The above `METADATA.yml` configures a DAG that runs once a day (`schedule: "0 * 
 The only thing that you might not have seen before are *YAML constructors*, as illustrated above in the `default_args.start_date` (using `!days_ago`) and `default_args.retry_delay` (using `!timedelta`) arguments, which are calling *functions* inside of YAML. In short, YAML constructors are just Python functions that are called when your YAML (or any Task Definition File Frontmatter) is loaded. We'll discuss YAML constructors more in later sections, but they are a powerful way to control File-oriented DAGs and tasks, and help ensure you have just as much control over your DAGs as writing them any other way.
 
 We'll also cover gusty-specific `METADATA.yml` later on, but for now, all you need to know is that the `METADATA.yml` file is used for passing arguments to [Airflow's DAG object](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG).
+
+## DAG File
+
+Finally, let's look at the DAG file that ultimately generates the Airflow DAG, `hello_dag.py`:
+
+```py
+import os
+from gusty import create_dag
+
+# There are many different ways to find Airflow's DAGs directory.
+# hello_dag_dir returns something like: "/usr/local/airflow/dags/hello_dag"
+hello_dag_dir = os.path.join(
+  os.environ["AIRFLOW_HOME"], 
+  "dags", 
+  "hello_dag")
+
+hello_dag = create_dag(hello_dag_dir, latest_only=False)
+```
+
+gusty's `create_dag` function takes as its first argument the path to a directory containing Task Definition Files, in our case the `hello_dag` direcory. Any keyword argument that can be passed to [Airflow's DAG object](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG) can be passed to `create_dag`, where any arguments that are specified *both* in `create_dag` and `METADATA.yml` will take the value specified in `METADATA.yml`.
+
+Additionally, `create_dag` takes some gusty-specific arguments, one of which is illustrated here: `latest_only=False`, which disables gusty's default behavior of installing a `LatestOnlyOperator` at the absolute root of an Airflow DAG. You can read more about the `LatestOnlyOperator` in [Airflow's documentation](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/operators/latest_only/index.html#airflow.operators.latest_only.LatestOnlyOperator), but setting `latest_only=False` will ensure a gusty-generated DAG mirrors Airflow's default behavior.
+
+---
+
+In subsequent chapters, we'll cover more of gusty's capabilities, but these are the core components of generating a file-oriented Airflow DAG with gusty!
