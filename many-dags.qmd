@@ -1,0 +1,77 @@
+---
+title: Many DAGs
+number-depth: 2
+---
+
+While `create_dag` is great for creating a single DAG, part of what makes gusty so convenient is that creating any number of new DAGs can be as easy as just making a new folder in a directory. Once you get to the point where you're just creating new folders full of Task Definition Files and metadata, you and your team get to think about Airflow less and can instead focus on defining the core components of your workflows.
+
+To help facilitate this growth, gusty also provides a `create_dags` function, for generating multiple DAGs. With `create_dags`, instead of passing a path to a *single* DAG folder, you'll pass in a directory path where *many* DAG folders reside.
+
+In the example below, we'll make a "home" for all of our gusty DAGs inside a directory named `gusty_dags`. Inside the `gusty_dags` directory are two DAGs, `hello_dag` and `goodbye_dag`.
+
+```sh
+$AIRFLOW_HOME/dags/
+│
+├── gusty_dags/
+│   │
+│   ├── goodbye_dag/
+│   │   ├── METADATA.yml
+│   │   └── goodbye.yml
+│   │
+│   └── hello_dag/
+│       ├── METADATA.yml
+│       └── hello.yml
+│
+│
+└── gusty_dags.py
+```
+
+## Using `create_dags`
+
+Now, we'll use the `create_dags` function in `gusty_dags.py` to generate *multiple* DAGs in a single file! Here's what our `gusty_dags.py` file looks like:
+
+```py
+import os
+from gusty import create_dags
+from gusty.utils import days_ago
+
+# gusty_dags_dir returns something like: "/usr/local/airflow/dags/gusty_dags"
+gusty_dags_dir = os.path.join(
+  os.environ["AIRFLOW_HOME"], 
+  "dags", 
+  "gusty_dags")
+
+create_dags(
+  gusty_dags_dir,
+  globals(),
+  schedule="0 0 * * *",
+  catchup=False,
+  default_args={
+    "owner": "you",
+    "email": "you@you.com",
+    "start_date": days_ago(1)
+  },
+  wait_for_defaults={
+    "mode": "reschedule"
+  },
+  extra_tags=["gusty_dags"],
+  latest_only=False)
+```
+
+The above will create both `hello_dag` and `goodbye_dag` DAGs, which reside inside of the `gusty_dags_dir` defined in `gusty_dags.py`.
+
+The second argument, `globals()`, assigns the DAGs to the global environment, so Airflow can find the DAGs.
+
+`schedule`, `catchup`, `default_args` are arguments available in the [Airflow DAG object](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG).
+
+`wait_for_defaults`, `extra_tags`, and `latest_only` are all gusty-specific `create_dag` arguments. `wait_for_defaults` and `latest_only` were previously discussed [here](task-dependencies.qmd#other-external-dependency-considerations) and [here](gusty-basics.qmd#dag-file). `extra_tags` are additional tags appended to any existing `tags` specified in either `create_dag` or a `METADATA.yml` file.
+
+## The Power of `create_dags`
+
+The value in `create_dags` is that multiple DAGs can be created with common schedules, default arguments, tags, and more, *plus* each DAG can contain DAG-specific information, such as documentation (e.g. `description` and `doc_md`) and tags, inside their own `METADATA.yml`.
+
+In gusty, `METADATA.yml` takes precedence over any `create_dag` argument, so you can override anything set in `create_dags` with the DAG-specific `METADATA.yml`.
+
+---
+
+Now you have the building blocks to use file-oriented orchestration in Airflow with gusty!
