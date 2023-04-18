@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>gusty - 1&nbsp; gusty Basics</title>
+<title>gusty - 1&nbsp; Basic DAG Structure</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -93,6 +93,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./task-dependencies.html" rel="next">
 <link href="./index.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -132,7 +133,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">gusty Basics</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Basic DAG Structure</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -160,11 +161,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
   </div>
 </li>
-        <li class="sidebar-item">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Getting Started</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./gusty-basics.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">gusty Basics</span></a>
+  <a href="./gusty-basics.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Basic DAG Structure</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./task-dependencies.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Task Dependencies</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -191,7 +207,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">gusty Basics</span></h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Basic DAG Structure</span></h1>
 </div>
 
 
@@ -253,16 +269,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>gusty will pass any argument that can be passed to the <code>operator</code> specified (as well as any <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/baseoperator/index.html#airflow.models.baseoperator.BaseOperatorMeta">BaseOperator</a> arguments) to the operator. The specified <code>operator</code> should be a full path to that operator.</p>
 <p>The file name of each Task Definition File will become the name of the Airflow task.</p>
 <p>Let’s explore these different file types by looking at the contents of these Task Definition Files in <code>hello_dag</code>.</p>
-<section id="yaml-files-with-hello.yml" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="yaml-files-with-hello.yml">YAML Files with <code>hello.yml</code></h3>
+<section id="yaml-files-with-hello.yml" class="level3">
+<h3 class="anchored" data-anchor-id="yaml-files-with-hello.yml">YAML Files with <code>hello.yml</code></h3>
 <p>Here are the contents of our <code>hello.yml</code> file:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">operator</span><span class="kw">:</span><span class="at"> airflow.operators.bash.BashOperator</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bash_command</span><span class="kw">:</span><span class="at"> echo hello</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The resulting task would contain a <code>BashOperator</code> with the task id <code>hello</code>.</p>
 <p>Because the entire file is YAML, there is no separation of Frontmatter and Body.</p>
 </section>
-<section id="sql-files-with-hey.sql" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="sql-files-with-hey.sql">SQL Files with <code>hey.sql</code></h3>
+<section id="sql-files-with-hey.sql" class="level3">
+<h3 class="anchored" data-anchor-id="sql-files-with-hey.sql">SQL Files with <code>hey.sql</code></h3>
 <p>Here are the contents of our <code>hey.sql</code> file:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">operator</span>: airflow.providers.sqlite.operators.sqlite.SqliteOperator</span>
@@ -272,8 +288,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The resulting task would contain a <code>SqliteOperator</code> with the task id <code>hey</code>.</p>
 <p>The Frontmatter of our SQL file is encased in a set of triple dashes (<code>---</code>). The Body of the file is everything below the second set of triple dashes. For SQL files, the Body of the file is passed to the <code>sql</code> argument of the underlying operator. In this case, <code>SELECT 'hey'</code> would be passed to the <code>sql</code> argument.</p>
 </section>
-<section id="python-files-with-hi.py" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="python-files-with-hi.py">Python Files with <code>hi.py</code></h3>
+<section id="python-files-with-hi.py" class="level3">
+<h3 class="anchored" data-anchor-id="python-files-with-hi.py">Python Files with <code>hi.py</code></h3>
 <p>Here are the contents of our <code>hi.py</code> file:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode py code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># python_callable: say_hi</span></span>
@@ -299,7 +315,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  which can be accessed from Airflow's</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  Graph view for your DAG. It looks</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  like a tiny poem.</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">schedule</span><span class="kw">:</span><span class="at"> </span><span class="st">"0 * * * *"</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">schedule</span><span class="kw">:</span><span class="at"> </span><span class="st">"0 0 * * *"</span></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">catchup</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">default_args</span><span class="kw">:</span></span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">owner</span><span class="kw">:</span><span class="at"> You</span></span>
@@ -314,7 +330,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> docs</span></span>
 <span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> demo</span></span>
 <span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> hello</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The above <code>METADATA.yml</code> configures a DAG that runs once a day (<code>schedule: "0 * * * *"</code>), has a start date of 28 days ago (<code>default_args.start_date: !days_ago 28</code>), and is tagged with the tags <code>docs</code>, <code>demo</code>, and <code>hello</code>. It also adds a <code>description</code>, a <code>doc_md</code>, and more, but every argument here is simply an argument in <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG">Airflow’s DAG object</a>.</p>
+<p>The above <code>METADATA.yml</code> configures a DAG that runs once a day (<code>schedule: "0 0 * * *"</code>), has a start date of 28 days ago (<code>default_args.start_date: !days_ago 28</code>), and is tagged with the tags <code>docs</code>, <code>demo</code>, and <code>hello</code>. It also adds a <code>description</code>, a <code>doc_md</code>, and more, but every argument here is simply an argument in <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG">Airflow’s DAG object</a>.</p>
 <p>The only thing that you might not have seen before are <em>YAML constructors</em>, as illustrated above in the <code>default_args.start_date</code> (using <code>!days_ago</code>) and <code>default_args.retry_delay</code> (using <code>!timedelta</code>) arguments, which are calling <em>functions</em> inside of YAML. In short, YAML constructors are just Python functions that are called when your YAML (or any Task Definition File Frontmatter) is loaded. We’ll discuss YAML constructors more in later sections, but they are a powerful way to control File-oriented DAGs and tasks, and help ensure you have just as much control over your DAGs as writing them any other way.</p>
 <p>We’ll also cover gusty-specific <code>METADATA.yml</code> later on, but for now, all you need to know is that the <code>METADATA.yml</code> file is used for passing arguments to <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG">Airflow’s DAG object</a>.</p>
 </section>
@@ -481,6 +497,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./task-dependencies.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Task Dependencies</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

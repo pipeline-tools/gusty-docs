@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.475">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>gusty - 2&nbsp; Task Dependencies</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./gusty-basics.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Task Dependencies</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">gusty</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Getting Started</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gusty-basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Basic DAG Structure</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./task-dependencies.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Task Dependencies</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#dependencies" id="toc-dependencies" class="nav-link active" data-scroll-target="#dependencies"><span class="toc-section-number">2.1</span>  Dependencies</a></li>
+  <li><a href="#external-dependencies" id="toc-external-dependencies" class="nav-link" data-scroll-target="#external-dependencies"><span class="toc-section-number">2.2</span>  External Dependencies</a>
+  <ul class="collapse">
+  <li><a href="#single-task-external-dependency" id="toc-single-task-external-dependency" class="nav-link" data-scroll-target="#single-task-external-dependency">Single Task External Dependency</a></li>
+  <li><a href="#whole-dag-external-dependency" id="toc-whole-dag-external-dependency" class="nav-link" data-scroll-target="#whole-dag-external-dependency">Whole DAG External Dependency</a></li>
+  <li><a href="#external-dependencies-in-metadata.yml" id="toc-external-dependencies-in-metadata.yml" class="nav-link" data-scroll-target="#external-dependencies-in-metadata.yml">External Dependencies in METADATA.yml</a></li>
+  <li><a href="#offset-schedules" id="toc-offset-schedules" class="nav-link" data-scroll-target="#offset-schedules">Offset Schedules</a></li>
+  <li><a href="#alternative-approaches-to-offset-schedules" id="toc-alternative-approaches-to-offset-schedules" class="nav-link" data-scroll-target="#alternative-approaches-to-offset-schedules">Alternative Approaches to Offset Schedules</a></li>
+  <li><a href="#other-external-dependency-considerations" id="toc-other-external-dependency-considerations" class="nav-link" data-scroll-target="#other-external-dependency-considerations">Other External Dependency Considerations</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Task Dependencies</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Task orchestration often involves ensuring tasks run in a specific order. With gusty, there are three ways to specify task dependencies:</p>
+<ol type="1">
+<li><p>A <strong>dependencies block</strong> in a task’s Frontmatter, where you can pass a list of task ids in the current dag upon which the current task depends.</p></li>
+<li><p>An <strong>external dependencies block</strong> in a task’s Frontmatter, where you can pass a list of <code>dag_id: task_id</code> combinations for tasks in <em>other</em> dags upon which the current task depends.</p></li>
+<li><p>A <strong>dependencies attribute</strong> on your custom operator, which is a list of task ids in the current dag upon which the current task depends. This powerful option allows for task dependencies to generated dynamically and automatically.</p></li>
+</ol>
+<p>In this section, we’ll focus on the the dependencies external dependencies blocks, available for use in any Task Definition File’s Frontmatter.</p>
+<p>We’ll continue using our <code>hello_dag</code> example from the <a href="./gusty-basics.html#gusty-dag-structure">previous chapter</a>.</p>
+<section id="dependencies" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="dependencies"><span class="header-section-number">2.1</span> Dependencies</h2>
+<p>Let’s say that our <code>hello</code> task depended on our <code>hi</code> task running before it. To specify this dependency, we would add the <code>hi</code> task to a list in the <code>dependencies</code> block of the <code>hello.yml</code> Task Definition File:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">operator</span><span class="kw">:</span><span class="at"> airflow.operators.bash.BashOperator</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dependencies</span><span class="kw">:</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> hi</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">bash_command</span><span class="kw">:</span><span class="at"> echo hello</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now, in our Airflow UI, our DAG graph will show that <code>hi</code> precedes <code>hello</code>.</p>
+<p>Remember, in gusty, the file name (minus the file extension) becomes the task id, so you do not need to specify <code>hi.py</code>, just <code>hi</code>.</p>
+<p>You can list as many dependencies as you need to for any task.</p>
+</section>
+<section id="external-dependencies" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="external-dependencies"><span class="header-section-number">2.2</span> External Dependencies</h2>
+<p>A common pattern in Airflow is to have tasks in one DAG depend on tasks in another DAG, or to have one DAG depend completely on another DAG. This behavior is possible in gusty by using the <code>external_dependencies</code> block. The <code>external_dependencies</code> block accepts a list of key-value pairs where each key is a DAG id and each value is a task id.</p>
+<p>For each key-value pair listed in the <code>external_dependencies</code> block, gusty will generate an <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/sensors/external_task/index.html#airflow.sensors.external_task.ExternalTaskSensor">ExternalTaskSensor</a>, a built-in Airflow sensor, and place the resulting sensor task upstream of the given dependent task. If the same external dependency is specified across multiple tasks, gusty will only create one sensor and place this one sensor upstream of all tasks with the specified external dependency.</p>
+<p>There are a few ways to configure external dependencies, and we’ll look at all of them below.</p>
+<section id="single-task-external-dependency" class="level3">
+<h3 class="anchored" data-anchor-id="single-task-external-dependency">Single Task External Dependency</h3>
+<p>Let’s keep building up our <code>hello.yml</code> Task Definition File.</p>
+<p>To specify that our <code>hello</code> task depends on an upstream task, which we’ll call <code>upstream_task</code>, in an upstream DAG, which we’ll call <code>upstream_dag</code>, we add the following <code>external_dependencies</code> block:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">operator</span><span class="kw">:</span><span class="at"> airflow.operators.bash.BashOperator</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dependencies</span><span class="kw">:</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> hi</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">external_dependencies</span><span class="kw">:</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">upstream_dag</span><span class="kw">:</span><span class="at"> upstream_task</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">bash_command</span><span class="kw">:</span><span class="at"> echo hello</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The result will be a new <code>ExternalTaskSensor</code> task with the task id <code>wait_for_upstream_dag_upstream_task</code>, preceding the existing <code>hello</code> task.</p>
+<p>As with <code>dependencies</code>, you can list as many external dependecies as you require.</p>
+</section>
+<section id="whole-dag-external-dependency" class="level3">
+<h3 class="anchored" data-anchor-id="whole-dag-external-dependency">Whole DAG External Dependency</h3>
+<p>An alternative to speciying a single task for an external dependency is to specify that the <em>entire</em> upstream DAG is the dependency. In this case, we use the special keyword <code>all</code> to configure the <code>ExternalTaskSensor</code> to wait for the entire DAG:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">operator</span><span class="kw">:</span><span class="at"> airflow.operators.bash.BashOperator</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dependencies</span><span class="kw">:</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> hi</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">external_dependencies</span><span class="kw">:</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">upstream_dag</span><span class="kw">:</span><span class="at"> all</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">bash_command</span><span class="kw">:</span><span class="at"> echo hello</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The result will be a new <code>ExternalTaskSensor</code> task with the task id <code>wait_for_DAG_upstream_dag</code>, preceding the existing <code>hello</code> task.</p>
+</section>
+<section id="external-dependencies-in-metadata.yml" class="level3">
+<h3 class="anchored" data-anchor-id="external-dependencies-in-metadata.yml">External Dependencies in METADATA.yml</h3>
+<p>As an Airflow project grows, you might find that more and more of your tasks have the same external dependency, or sometimes DAGs just logically <em>should</em> depend on one another (e.g.&nbsp;a DAG that ingests data should precede a DAG that transforms that data). For these cases, you can utilize the same exact same <code>external_dependencies</code> block in any <code>METADATA.yml</code> file.</p>
+<p>When you specify an external dependency in a <code>METADATA.yml</code> file, the <code>ExternalTaskSensor</code> task will be placed at the root of the DAG, ensuring that no tasks in the DAG run before the <code>ExternalTaskSensor</code> task completes.</p>
+</section>
+<section id="offset-schedules" class="level3">
+<h3 class="anchored" data-anchor-id="offset-schedules">Offset Schedules</h3>
+<p>Understandably, but frustratingly, the default behavior of Airflow’s <code>ExternalTaskSensor</code> is to look for <a href="https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dag-run.html#dag-runs">DAG runs</a> that have that have ran at the same “logical date”. This means that if you have one DAG scheduled to run daily at 00:00 UTC (<code>"0 0 * * *"</code>), let’s call this DAG <code>earlier_dag</code>, and another DAG scheduled to run daily at 06:00 UTC (<code>"0 6 * * *"</code>), let’s call this DAG <code>later_dag</code>, and you specify an external dependency between <code>later_dag</code> and <code>earlier_dag</code>, the default syntax for an <code>external_dependencies</code> block will not work, because - in the case where <code>later_dag</code> depends on <code>earlier_dag</code> - the <code>ExternalTaskSensor</code> in <code>later_dag</code> will be looking for an 06:00 UTC DAG run of <code>earlier_dag</code>, which does not exist.</p>
+<p>Fortunately, the <code>external_dependencies</code> block accepts an alternative syntax for this scenario, where:</p>
+<ul>
+<li><p>The keys under <code>external_dependencies</code> are the external DAG ids.</p></li>
+<li><p>A <code>tasks</code> list is provided for a given external DAG.</p></li>
+<li><p>Additional configuration for the <code>ExternalTaskSensor</code> class, such as the <code>execution_delta</code>, can be passed in.</p></li>
+</ul>
+<p>For example, to configure <code>later_dag</code> (06:00 UTC) to depend on <code>earlier_dag</code> (00:00 UTC), we could add the following block to <code>later_dag</code>’s <code>METADATA.yml</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">external_dependencies</span><span class="kw">:</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">earlier_dag</span><span class="kw">:</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">execution_delta</span><span class="kw">:</span><span class="at"> !timedelta</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">hours</span><span class="kw">:</span><span class="at"> </span><span class="dv">6</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">tasks</span><span class="kw">:</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> all</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This will ensure the resulting <code>wait_for_DAG_earlier_dag</code> looks for a successful <code>earlier_dag</code> DAG run at 00:00 UTC (<code>later_dag</code>’s 06:00 UTC run minus 6 hours).</p>
+</section>
+<section id="alternative-approaches-to-offset-schedules" class="level3">
+<h3 class="anchored" data-anchor-id="alternative-approaches-to-offset-schedules">Alternative Approaches to Offset Schedules</h3>
+<section id="custom-sensors" class="level4">
+<h4 class="anchored" data-anchor-id="custom-sensors">Custom Sensors</h4>
+<p>It’s possible to create a custom sensor that “doesn’t care” about the logical date, and just looks at the last/latest DAG run. This ensures you don’t have to worry about setting any offset schedules.</p>
+<p>Here is a small snippet inspired by the <a href="https://github.com/cal-itp/data-infra">cal-itp/data-infra</a> repo (which they since deleted in <a href="https://github.com/cal-itp/data-infra/pull/2277/files#diff-c97c3338af470ab008ff734e2fa7b38769d95f500c6b07ce813eba57dc82dd5d">this commit</a>):</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode py code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> airflow.utils.db <span class="im">import</span> provide_session</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> airflow.sensors.external_task_sensor <span class="im">import</span> ExternalTaskSensor</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LastDagRunSensor(ExternalTaskSensor):</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, external_dag_id, external_task_id<span class="op">=</span><span class="va">None</span>, <span class="op">**</span>kwargs):</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>(</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>          external_dag_id<span class="op">=</span>external_dag_id, </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>          external_task_id<span class="op">=</span>external_task_id,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>          <span class="op">**</span>kwargs)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        <span class="kw">def</span> dag_last_exec(crnt_dttm):</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">self</span>.get_dag_last_execution_date(<span class="va">self</span>.external_dag_id)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.execution_date_fn <span class="op">=</span> dag_last_exec</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">@provide_session</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_dag_last_execution_date(<span class="va">self</span>, dag_id, session):</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>        <span class="im">from</span> airflow.models <span class="im">import</span> DagModel</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        q <span class="op">=</span> session.query(DagModel).<span class="bu">filter</span>(DagModel.dag_id <span class="op">==</span> <span class="va">self</span>.external_dag_id)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>        dag <span class="op">=</span> q.first()</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> dag.get_last_dagrun().logical_date</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In the event you wanted to use this <code>LastDagRunSensor</code> as the sensor class for the external dependencies in your gusty DAG, you could do so by using the <code>wait_for_class</code> argument available in <code>create_dag</code>. For example, here’s what your <code>later_dag.py</code> DAG file might look like if you decided to do so:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode py code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gusty <span class="im">import</span> create_dag</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Wherever you store the code for the above sensor..</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plugins.sensors <span class="im">import</span> LastDagRunSensor</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>later_dag_dir <span class="op">=</span> os.path.join(</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  os.environ[<span class="st">"AIRFLOW_HOME"</span>], </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"dags"</span>, </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"later_dag"</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>later_dag <span class="op">=</span> create_dag(</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  later_dag_dir, </span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  wait_for_class<span class="op">=</span>LastDagRunSensor,</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  latest_only<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now all of the external dependencies defined in the <code>later_dag</code>’s Task Definition Files will use the custom <code>LastDagRunSensor</code> instead of the default <code>ExternalTaskSensor</code>.</p>
+</section>
+</section>
+<section id="other-external-dependency-considerations" class="level3">
+<h3 class="anchored" data-anchor-id="other-external-dependency-considerations">Other External Dependency Considerations</h3>
+<p>You can configure your external dependencies further using the <code>wait_for_defaults</code> argument in <code>create_dag</code>, which accepts a dictionary of arguments that are available to Airflow’s <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/sensors/external_task/index.html#airflow.sensors.external_task.ExternalTaskSensor">ExternalTaskSensor</a>. Here is the subset of parameters available in <code>wait_for_defaults</code>:</p>
+<ul>
+<li><code>poke_interval</code></li>
+<li><code>timeout</code></li>
+<li><code>retries</code></li>
+<li><code>mode</code></li>
+<li><code>soft_fail</code></li>
+<li><code>execution_delta</code></li>
+<li><code>execution_date_fn</code></li>
+<li><code>check_existence</code></li>
+</ul>
+<section id="set-mode-to-reschedule" class="level4">
+<h4 class="anchored" data-anchor-id="set-mode-to-reschedule">Set mode to reschedule</h4>
+<p>By default in Airflow, sensors run in <code>mode="poke"</code>, which means they take up a worker slot for the entire time they are waiting for the external task/DAG to complete. You can set <code>mode="reschedule"</code> to free up the worker slot in between “pokes”. Building on the <code>create_dag</code> call in <code>later_dag.py</code> above:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode py code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>later_dag <span class="op">=</span> create_dag(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  later_dag_dir, </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  wait_for_class<span class="op">=</span>LastDagRunSensor,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  wait_for_defaults<span class="op">=</span>{</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"mode"</span>: <span class="st">"reschedule"</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  latest_only<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="set-a-timeout" class="level4">
+<h4 class="anchored" data-anchor-id="set-a-timeout">Set a timeout</h4>
+<p>By default in gusty, external dependencies will timeout after 1 hour, or 3600 seconds. If you want to wait longer, you can set your <code>timeout</code>, in seconds:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode py code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>later_dag <span class="op">=</span> create_dag(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  later_dag_dir, </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  wait_for_class<span class="op">=</span>LastDagRunSensor,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  wait_for_defaults<span class="op">=</span>{</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"mode"</span>: <span class="st">"reschedule"</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"timeout"</span>: <span class="dv">7200</span> <span class="co"># 2 hours in seconds</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  latest_only<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="learn-more" class="level4">
+<h4 class="anchored" data-anchor-id="learn-more">Learn More</h4>
+<p>If you want to learn more about sensors, check out Airflow’s <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/sensors/base/index.html#airflow.sensors.base.BaseSensorOperator">BaseSensorOperator</a> and Airflow’s <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/baseoperator/index.html#airflow.models.baseoperator.BaseOperator">BaseOperator</a>.</p>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./gusty-basics.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Basic DAG Structure</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
