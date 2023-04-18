@@ -182,6 +182,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#python-files-with-hi.py" id="toc-python-files-with-hi.py" class="nav-link" data-scroll-target="#python-files-with-hi.py">Python Files with <code>hi.py</code></a></li>
   </ul></li>
   <li><a href="#metadata.yml" id="toc-metadata.yml" class="nav-link" data-scroll-target="#metadata.yml"><span class="toc-section-number">1.3</span>  METADATA.yml</a></li>
+  <li><a href="#dag-file" id="toc-dag-file" class="nav-link" data-scroll-target="#dag-file"><span class="toc-section-number">1.4</span>  DAG File</a></li>
   </ul>
 </nav>
     </div>
@@ -316,6 +317,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The above <code>METADATA.yml</code> configures a DAG that runs once a day (<code>schedule: "0 * * * *"</code>), has a start date of 28 days ago (<code>default_args.start_date: !days_ago 28</code>), and is tagged with the tags <code>docs</code>, <code>demo</code>, and <code>hello</code>. It also adds a <code>description</code>, a <code>doc_md</code>, and more, but every argument here is simply an argument in <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG">Airflow’s DAG object</a>.</p>
 <p>The only thing that you might not have seen before are <em>YAML constructors</em>, as illustrated above in the <code>default_args.start_date</code> (using <code>!days_ago</code>) and <code>default_args.retry_delay</code> (using <code>!timedelta</code>) arguments, which are calling <em>functions</em> inside of YAML. In short, YAML constructors are just Python functions that are called when your YAML (or any Task Definition File Frontmatter) is loaded. We’ll discuss YAML constructors more in later sections, but they are a powerful way to control File-oriented DAGs and tasks, and help ensure you have just as much control over your DAGs as writing them any other way.</p>
 <p>We’ll also cover gusty-specific <code>METADATA.yml</code> later on, but for now, all you need to know is that the <code>METADATA.yml</code> file is used for passing arguments to <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG">Airflow’s DAG object</a>.</p>
+</section>
+<section id="dag-file" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="dag-file"><span class="header-section-number">1.4</span> DAG File</h2>
+<p>Finally, let’s look at the DAG file that ultimately generates the Airflow DAG, <code>hello_dag.py</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode py code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gusty <span class="im">import</span> create_dag</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># There are many different ways to find Airflow's DAGs directory.</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># hello_dag_dir returns something like: "/usr/local/airflow/dags/hello_dag"</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>hello_dag_dir <span class="op">=</span> os.path.join(</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  os.environ[<span class="st">"AIRFLOW_HOME"</span>], </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"dags"</span>, </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"hello_dag"</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>hello_dag <span class="op">=</span> create_dag(hello_dag_dir, latest_only<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>gusty’s <code>create_dag</code> function takes as its first argument the path to a directory containing Task Definition Files, in our case the <code>hello_dag</code> direcory. Any keyword argument that can be passed to <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG">Airflow’s DAG object</a> can be passed to <code>create_dag</code>, where any arguments that are specified <em>both</em> in <code>create_dag</code> and <code>METADATA.yml</code> will take the value specified in <code>METADATA.yml</code>.</p>
+<p>Additionally, <code>create_dag</code> takes some gusty-specific arguments, one of which is illustrated here: <code>latest_only=False</code>, which disables gusty’s default behavior of installing a <code>LatestOnlyOperator</code> at the absolute root of an Airflow DAG. You can read more about the <code>LatestOnlyOperator</code> in <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/operators/latest_only/index.html#airflow.operators.latest_only.LatestOnlyOperator">Airflow’s documentation</a>, but setting <code>latest_only=False</code> will ensure a gusty-generated DAG mirrors Airflow’s default behavior.</p>
+<hr>
+<p>In subsequent chapters, we’ll cover more of gusty’s capabilities, but these are the core components of generating a file-oriented Airflow DAG with gusty!</p>
 
 
 </section>
