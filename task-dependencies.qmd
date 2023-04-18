@@ -174,6 +174,8 @@ You can configure your external dependencies further using the `wait_for_default
 - `execution_date_fn`
 - `check_existence`
 
+Additionally, anything available to [BaseOperator](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/baseoperator/index.html#airflow.models.baseoperator.BaseOperator) will be passed through.
+
 #### Set mode to reschedule
 
 By default in Airflow, sensors run in `mode="poke"`, which means they take up a worker slot for the entire time they are waiting for the external task/DAG to complete. You can set `mode="reschedule"` to free up the worker slot in between "pokes". Building on the `create_dag` call in `later_dag.py` above:
