@@ -354,6 +354,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><code>execution_date_fn</code></li>
 <li><code>check_existence</code></li>
 </ul>
+<p>Additionally, anything available to <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/baseoperator/index.html#airflow.models.baseoperator.BaseOperator">BaseOperator</a> will be passed through.</p>
 <section id="set-mode-to-reschedule" class="level4">
 <h4 class="anchored" data-anchor-id="set-mode-to-reschedule">Set mode to reschedule</h4>
 <p>By default in Airflow, sensors run in <code>mode="poke"</code>, which means they take up a worker slot for the entire time they are waiting for the external task/DAG to complete. You can set <code>mode="reschedule"</code> to free up the worker slot in between “pokes”. Building on the <code>create_dag</code> call in <code>later_dag.py</code> above:</p>
