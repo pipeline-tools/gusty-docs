@@ -75,5 +75,19 @@
     "title": "3  Task Groups",
     "section": "3.2 Why Use Task Group Folders?",
     "text": "3.2 Why Use Task Group Folders?\nTask groups folders serve a few powerful purposes at scale:\n\nThey help keep Task Definition Files organized.\nThey can help keep parts of a DAG logically compartmentalized.\nThey can help keep dependencies between sets of tasks easier to manage."
+  },
+  {
+    "objectID": "many-dags.html#using-create_dags",
+    "href": "many-dags.html#using-create_dags",
+    "title": "4  Many DAGs",
+    "section": "4.1 Using create_dags",
+    "text": "4.1 Using create_dags\nNow, we’ll use the create_dags function in gusty_dags.py to generate multiple DAGs in a single file! Here’s what our gusty_dags.py file looks like:\nimport os\nfrom gusty import create_dags\nfrom gusty.utils import days_ago\n\n# gusty_dags_dir returns something like: \"/usr/local/airflow/dags/gusty_dags\"\ngusty_dags_dir = os.path.join(\n  os.environ[\"AIRFLOW_HOME\"], \n  \"dags\", \n  \"gusty_dags\")\n\ncreate_dags(\n  gusty_dags_dir,\n  globals(),\n  schedule=\"0 0 * * *\",\n  catchup=False,\n  default_args={\n    \"owner\": \"you\",\n    \"email\": \"you@you.com\",\n    \"start_date\": days_ago(1)\n  },\n  wait_for_defaults={\n    \"mode\": \"reschedule\"\n  },\n  extra_tags=[\"gusty_dags\"],\n  latest_only=False)\nThe above will create both hello_dag and goodbye_dag DAGs, which reside inside of the gusty_dags_dir defined in gusty_dags.py.\nThe second argument, globals(), assigns the DAGs to the global environment, so Airflow can find the DAGs.\nschedule, catchup, default_args are arguments available in the Airflow DAG object.\nwait_for_defaults, extra_tags, and latest_only are all gusty-specific create_dag arguments. wait_for_defaults and latest_only were previously discussed here and here. extra_tags are additional tags appended to any existing tags specified in either create_dag or a METADATA.yml file."
+  },
+  {
+    "objectID": "many-dags.html#the-power-of-create_dags",
+    "href": "many-dags.html#the-power-of-create_dags",
+    "title": "4  Many DAGs",
+    "section": "4.2 The Power of create_dags",
+    "text": "4.2 The Power of create_dags\nThe value in create_dags is that multiple DAGs can be created with common schedules, default arguments, tags, and more, plus each DAG can contain DAG-specific information, such as documentation (e.g. description and doc_md) and tags, inside their own METADATA.yml.\nIn gusty, METADATA.yml takes precedence over any create_dag argument, so you can override anything set in create_dags with the DAG-specific METADATA.yml.\n\nNow you have the building blocks to use file-oriented orchestration in Airflow with gusty!"
   }
 ]

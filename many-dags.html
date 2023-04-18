@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>3&nbsp; Task Groups</title>
+<title>4&nbsp; Many DAGs</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -92,8 +92,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./many-dags.html" rel="next">
-<link href="./task-dependencies.html" rel="prev">
+<link href="./task-groups.html" rel="prev">
 <link href="./media/logo/favicon.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -150,7 +149,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </nav>
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Task Groups</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Many DAGs</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -198,12 +197,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./task-groups.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Task Groups</span></a>
+  <a href="./task-groups.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Task Groups</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./many-dags.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Many DAGs</span></a>
+  <a href="./many-dags.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Many DAGs</span></a>
   </div>
 </li>
       </ul>
@@ -217,8 +216,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#task-group-metadata.yml" id="toc-task-group-metadata.yml" class="nav-link active" data-scroll-target="#task-group-metadata.yml"><span class="toc-section-number">3.1</span>  Task Group METADATA.yml</a></li>
-  <li><a href="#why-use-task-group-folders" id="toc-why-use-task-group-folders" class="nav-link" data-scroll-target="#why-use-task-group-folders"><span class="toc-section-number">3.2</span>  Why Use Task Group Folders?</a></li>
+  <li><a href="#using-create_dags" id="toc-using-create_dags" class="nav-link active" data-scroll-target="#using-create_dags"><span class="toc-section-number">4.1</span>  Using <code>create_dags</code></a></li>
+  <li><a href="#the-power-of-create_dags" id="toc-the-power-of-create_dags" class="nav-link" data-scroll-target="#the-power-of-create_dags"><span class="toc-section-number">4.2</span>  The Power of <code>create_dags</code></a></li>
   </ul>
 </nav>
     </div>
@@ -227,7 +226,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Task Groups</span></h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Many DAGs</span></h1>
 </div>
 
 
@@ -242,73 +241,62 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<p>In Airflow, a <a href="https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html#taskgroups">TaskGroup</a> is a fairly arbitrary - but often useful - grouping of tasks. In gusty, you can organize your Task Definition Files into Airflow task groups by simply adding subfolders to your DAG folder, and putting your Task Definition Files in each subfolder. As you might have guessed, the task group id is the same as the subfolder name.</p>
-<p>For example, maybe we want our <code>hello_dag</code> to have it tasks organized into separate task groups based on the language of the greeting. Here’s what the updated structure of our <code>hello_dag</code> DAG might look like:</p>
+<p>While <code>create_dag</code> is great for creating a single DAG, part of what makes gusty so convenient is that creating any number of new DAGs can be as easy as just making a new folder in a directory. Once you get to the point where you’re just creating new folders full of Task Definition Files and metadata, you and your team get to think about Airflow less and can instead focus on defining the core components of your workflows.</p>
+<p>To help facilitate this growth, gusty also provides a <code>create_dags</code> function, for generating multiple DAGs. With <code>create_dags</code>, instead of passing a path to a <em>single</em> DAG folder, you’ll pass in a directory path where <em>many</em> DAG folders reside.</p>
+<p>In the example below, we’ll make a “home” for all of our gusty DAGs inside a directory named <code>gusty_dags</code>. Inside the <code>gusty_dags</code> directory are two DAGs, <code>hello_dag</code> and <code>goodbye_dag</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">$AIRFLOW_HOME</span><span class="ex">/dags/</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> hello_dag/</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> gusty_dags/</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   ├── english/</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │   ├── hello.yml</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │   ├── hey.sql</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │   └── hi.py</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   ├── french/</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │   ├── bonjour.py</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │   ├── bonsoir.sql</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │   └── salut.yml</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   ├── spanish/</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │   ├── hola.py</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │   ├── oye.sql</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │   └── saludos.yml</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   └── METADATA.yml</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="ex">└──</span> hello_dag.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Now, our Airflow DAG will have three task groups: <code>english</code>, <code>french</code>, and <code>spanish</code>. Each task group will contain the tasks found in each folder. For example, the <code>french</code> task group will contain tasks <code>bonjour</code>, <code>bonsoir</code>, and <code>salut</code>.</p>
-<p>By default, gusty does <em>not</em> prefix a task group’s name on to the task name. Any altering of a task name inside of a task group is done so explcitly. How? Just like DAG folders, task group folders can also leverage their own <code>METADATA.yml</code> files.</p>
-<section id="task-group-metadata.yml" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="task-group-metadata.yml"><span class="header-section-number">3.1</span> Task Group METADATA.yml</h2>
-<p>You can add a <code>METADATA.yml</code> file to any task group folder. This is useful for when you want to have specific task group behavior, such as different <code>default_args</code> or if you want to prefix or suffix the task group id onto the task id.</p>
-<p>Let’s add a <code>METADATA.yml</code> file to our <code>spanish</code> task group subfolder:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">dags/</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> hello_dag/</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   ├── english/</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │   ├── hello.yml</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │   ├── hey.sql</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │   └── hi.py</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   ├── french/</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │   ├── bonjour.py</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │   ├── bonsoir.sql</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │   └── salut.yml</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   ├── spanish/</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │   ├── METADATA.yml</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │   ├── hola.py</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │   ├── oye.sql</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │   └── saludos.yml</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   └── METADATA.yml</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="ex">└──</span> hello_dag.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The contents of this task group <code>METADATA.yml</code> file might look something like this:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tooltip</span><span class="kw">:</span><span class="at"> </span><span class="st">"This task group contains Spanish greetings."</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prefix_group_id</span><span class="kw">:</span><span class="at"> </span><span class="ch">True</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The above <code>METADATA.yml</code> will give the <code>spanish</code> task group a tooltip, when hoving over the node in Airflow’s task group, and all tasks in the task group will be prefixed with <code>spanish_</code>, such as <code>spanish_oye</code> and <code>spanish_saludos</code>.</p>
-<p>Lastly, just like tasks, task group <code>METADATA.yml</code> can take advantage of <code>dependencies</code> blocks. So if a lot of tasks depend on the same upstream task, it might make sense to put them in the same task group folder, and set the upstream dependency in the <code>METADATA.yml</code>.</p>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   ├── goodbye_dag/</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │   ├── METADATA.yml</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │   └── goodbye.yml</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   │</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   └── hello_dag/</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>       ├── METADATA.yml</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>       └── hello.yml</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="ex">└──</span> gusty_dags.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="using-create_dags" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="using-create_dags"><span class="header-section-number">4.1</span> Using <code>create_dags</code></h2>
+<p>Now, we’ll use the <code>create_dags</code> function in <code>gusty_dags.py</code> to generate <em>multiple</em> DAGs in a single file! Here’s what our <code>gusty_dags.py</code> file looks like:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode py code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gusty <span class="im">import</span> create_dags</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gusty.utils <span class="im">import</span> days_ago</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># gusty_dags_dir returns something like: "/usr/local/airflow/dags/gusty_dags"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>gusty_dags_dir <span class="op">=</span> os.path.join(</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  os.environ[<span class="st">"AIRFLOW_HOME"</span>], </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"dags"</span>, </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"gusty_dags"</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>create_dags(</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  gusty_dags_dir,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="bu">globals</span>(),</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  schedule<span class="op">=</span><span class="st">"0 0 * * *"</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  catchup<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  default_args<span class="op">=</span>{</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"owner"</span>: <span class="st">"you"</span>,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"email"</span>: <span class="st">"you@you.com"</span>,</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"start_date"</span>: days_ago(<span class="dv">1</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  },</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  wait_for_defaults<span class="op">=</span>{</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"mode"</span>: <span class="st">"reschedule"</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  },</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  extra_tags<span class="op">=</span>[<span class="st">"gusty_dags"</span>],</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  latest_only<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The above will create both <code>hello_dag</code> and <code>goodbye_dag</code> DAGs, which reside inside of the <code>gusty_dags_dir</code> defined in <code>gusty_dags.py</code>.</p>
+<p>The second argument, <code>globals()</code>, assigns the DAGs to the global environment, so Airflow can find the DAGs.</p>
+<p><code>schedule</code>, <code>catchup</code>, <code>default_args</code> are arguments available in the <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG">Airflow DAG object</a>.</p>
+<p><code>wait_for_defaults</code>, <code>extra_tags</code>, and <code>latest_only</code> are all gusty-specific <code>create_dag</code> arguments. <code>wait_for_defaults</code> and <code>latest_only</code> were previously discussed <a href="./task-dependencies.html#other-external-dependency-considerations">here</a> and <a href="./gusty-basics.html#dag-file">here</a>. <code>extra_tags</code> are additional tags appended to any existing <code>tags</code> specified in either <code>create_dag</code> or a <code>METADATA.yml</code> file.</p>
 </section>
-<section id="why-use-task-group-folders" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="why-use-task-group-folders"><span class="header-section-number">3.2</span> Why Use Task Group Folders?</h2>
-<p>Task groups folders serve a few powerful purposes at scale:</p>
-<ul>
-<li><p>They help keep Task Definition Files organized.</p></li>
-<li><p>They can help keep parts of a DAG logically compartmentalized.</p></li>
-<li><p>They can help keep dependencies between sets of tasks easier to manage.</p></li>
-</ul>
+<section id="the-power-of-create_dags" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="the-power-of-create_dags"><span class="header-section-number">4.2</span> The Power of <code>create_dags</code></h2>
+<p>The value in <code>create_dags</code> is that multiple DAGs can be created with common schedules, default arguments, tags, and more, <em>plus</em> each DAG can contain DAG-specific information, such as documentation (e.g.&nbsp;<code>description</code> and <code>doc_md</code>) and tags, inside their own <code>METADATA.yml</code>.</p>
+<p>In gusty, <code>METADATA.yml</code> takes precedence over any <code>create_dag</code> argument, so you can override anything set in <code>create_dags</code> with the DAG-specific <code>METADATA.yml</code>.</p>
+<hr>
+<p>Now you have the building blocks to use file-oriented orchestration in Airflow with gusty!</p>
 
 
 </section>
@@ -449,14 +437,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./task-dependencies.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Task Dependencies</span></span>
+      <a href="./task-groups.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Task Groups</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./many-dags.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Many DAGs</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->
