@@ -2,9 +2,14 @@ project:
   type: book
 
 book:
-  title: "gusty"
-  author: "Chris Cardillo"
-  date: "4/17/2023"
+  title: ""
+  # author: "Chris Cardillo"
+  # date: "4/17/2023"
+  sidebar: 
+    logo: media/logo/logo_500.svg
+    tools:
+    - icon: github
+      href: https://github.com/chriscardillo/gusty
   chapters:
     - index.qmd
     - part: "Getting Started"
