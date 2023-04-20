@@ -235,11 +235,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <ul class="collapse">
   <li><a href="#latest_only" id="toc-latest_only" class="nav-link" data-scroll-target="#latest_only"><code>latest_only</code></a></li>
   <li><a href="#extra_tags" id="toc-extra_tags" class="nav-link" data-scroll-target="#extra_tags"><code>extra_tags</code></a></li>
+  <li><a href="#root_tasks" id="toc-root_tasks" class="nav-link" data-scroll-target="#root_tasks"><code>root_tasks</code></a></li>
+  <li><a href="#leaf_tasks" id="toc-leaf_tasks" class="nav-link" data-scroll-target="#leaf_tasks"><code>leaf_tasks</code></a></li>
+  <li><a href="#external_dependencies" id="toc-external_dependencies" class="nav-link" data-scroll-target="#external_dependencies"><code>external_dependencies</code></a></li>
   <li><a href="#dag_constructors" id="toc-dag_constructors" class="nav-link" data-scroll-target="#dag_constructors"><code>dag_constructors</code></a></li>
   <li><a href="#wait_for_defaults" id="toc-wait_for_defaults" class="nav-link" data-scroll-target="#wait_for_defaults"><code>wait_for_defaults</code></a></li>
   <li><a href="#task_group_defaults" id="toc-task_group_defaults" class="nav-link" data-scroll-target="#task_group_defaults"><code>task_group_defaults</code></a></li>
   <li><a href="#leaf_tasks_from_dict" id="toc-leaf_tasks_from_dict" class="nav-link" data-scroll-target="#leaf_tasks_from_dict"><code>leaf_tasks_from_dict</code></a></li>
   <li><a href="#parse_hooks" id="toc-parse_hooks" class="nav-link" data-scroll-target="#parse_hooks"><code>parse_hooks</code></a></li>
+  <li><a href="#ignore_subfolders" id="toc-ignore_subfolders" class="nav-link" data-scroll-target="#ignore_subfolders"><code>ignore_subfolders</code></a></li>
   <li><a href="#render_on_create" id="toc-render_on_create" class="nav-link" data-scroll-target="#render_on_create"><code>render_on_create</code></a></li>
   </ul></li>
   <li><a href="#create_dag-specific-notes" id="toc-create_dag-specific-notes" class="nav-link" data-scroll-target="#create_dag-specific-notes"><span class="toc-section-number">A.2</span>  <code>create_dag</code> Specific Notes</a></li>
@@ -267,8 +271,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<p>Both <code>create_dag</code> and <code>create_dags</code> can take any keyword arguments available to <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG">Airflow’s DAG object</a>.</p>
-<p>Below we will cover all gusty-specific arguments also available in <code>create_dag</code> and <code>create_dags</code>, followed by specific <code>create_dag</code> and <code>create_dags</code> considerations.</p>
+<p>Both <code>create_dag</code> and <code>create_dags</code> can take any keyword arguments available to <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG">Airflow’s DAG object</a>. Additionally, there are some gusty-specific arguments for these functions.</p>
+<p>Below we will cover all gusty-specific arguments available in <code>create_dag</code> and <code>create_dags</code>, followed by specific <code>create_dag</code> and <code>create_dags</code> considerations. The gusty-specific arguments can also be used in a DAG’s <code>METADATA.yml</code>.</p>
 <p>For the best results, it’s recommended to always use keyword arguments with <code>create_dag</code> and <code>create_dags</code>.</p>
 <section id="gusty-specific-arguments" class="level2" data-number="A.1">
 <h2 data-number="A.1" class="anchored" data-anchor-id="gusty-specific-arguments"><span class="header-section-number">A.1</span> gusty-specific arguments</h2>
@@ -281,6 +285,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>In addition to any tags set via an Airflow DAG’s <code>tags</code> argument (available - as with any Airflow DAG parameter - in both <code>create_dag</code> and <code>METADATA.yml</code>), gusty will append any tags set in the <code>extra_tags</code> list to the provided tags.</p>
 <p>To set <code>extra_tags</code> in your call to <code>create_dag</code>, provide a list like so:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>extra_tags<span class="op">=</span>[<span class="st">"your"</span>, <span class="st">"extra"</span>, <span class="st">"tags"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="root_tasks" class="level3">
+<h3 class="anchored" data-anchor-id="root_tasks"><code>root_tasks</code></h3>
+<p>You can assign certain tasks to be at the beginning of the DAG by declaring <code>root_tasks</code>, a list of task ids. Any task id that is designated as a root task cannot have a <code>dependencies</code> block.</p>
+</section>
+<section id="leaf_tasks" class="level3">
+<h3 class="anchored" data-anchor-id="leaf_tasks"><code>leaf_tasks</code></h3>
+<p>You can assign certain tasks to be at the end of the DAG by declaring <code>leaf_tasks</code>, a list of task ids. Any task id that is designated as a leaf task cannot have a <code>dependencies</code> block.</p>
+</section>
+<section id="external_dependencies" class="level3">
+<h3 class="anchored" data-anchor-id="external_dependencies"><code>external_dependencies</code></h3>
+<p>A list of key value pairs in the format of <code>dag_id: task_id</code>, where the <code>dag_id</code> is some upstream DAG and the <code>task_id</code> is the task in that upstream DAG. When set, gusty will create <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/sensors/external_task/index.html#airflow.sensors.external_task.ExternalTaskSensor">ExternalTaskSensor</a> tasks and place them at the root of the DAG. Set the <code>task_id</code> to <code>all</code> to wait for the entire upstream DAG to complete. See the section on external dependencies for more details.</p>
 </section>
 <section id="dag_constructors" class="level3">
 <h3 class="anchored" data-anchor-id="dag_constructors"><code>dag_constructors</code></h3>
@@ -328,6 +344,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">".sh"</span>: your_shell_file_parsing_function</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>See gusty’s built-in parsers <a href="https://github.com/chriscardillo/gusty/blob/main/gusty/parsing/parsers.py">here</a>.</p>
+</section>
+<section id="ignore_subfolders" class="level3">
+<h3 class="anchored" data-anchor-id="ignore_subfolders"><code>ignore_subfolders</code></h3>
+<p>Will disable the creation of task groups from subfolders when set to <code>True</code>.</p>
 </section>
 <section id="render_on_create" class="level3">
 <h3 class="anchored" data-anchor-id="render_on_create"><code>render_on_create</code></h3>
