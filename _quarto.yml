@@ -6,7 +6,7 @@ book:
   favicon: media/logo/favicon.png
   navbar:
     pinned: TRUE
-    right: 
+    left: 
       - icon: github
         href: https://github.com/chriscardillo/gusty
   sidebar: 
@@ -19,6 +19,9 @@ book:
         - task-dependencies.qmd
         - task-groups.qmd
         - many-dags.qmd
+    - part: "Doing More"
+      chapters:
+        - using-constructors.qmd
   appendices: 
     - create-dag-args.qmd
 format:

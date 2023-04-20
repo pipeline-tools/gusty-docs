@@ -75,7 +75,7 @@ tooltip: "This task group contains Spanish greetings."
 prefix_group_id: True
 ```
 
-The above `METADATA.yml` will give the `spanish` task group a tooltip, when hoving over the node in Airflow's task group, and all tasks in the task group will be prefixed with `spanish_`, such as `spanish_oye` and `spanish_saludos`.
+The above `METADATA.yml` will give the `spanish` task group a tooltip, when hoving over the node in the Airflow UI's graph view, and all tasks in the task group will be prefixed with `spanish_`, such as `spanish_oye` and `spanish_saludos`.
 
 Lastly, just like tasks, task group `METADATA.yml` can take advantage of `dependencies` blocks. So if a lot of tasks depend on the same upstream task, it might make sense to put them in the same task group folder, and set the upstream dependency in the `METADATA.yml`.
 
