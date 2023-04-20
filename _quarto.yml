@@ -22,6 +22,7 @@ book:
     - part: "Doing More"
       chapters:
         - using-constructors.qmd
+        - multi-tasking.qmd
   appendices: 
     - create-dag-args.qmd
 format:
