@@ -3,9 +3,9 @@ title: create_dag Arguments
 number-depth: 2
 ---
 
-Both `create_dag` and `create_dags` can take any keyword arguments available to [Airflow's DAG object](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG).
+Both `create_dag` and `create_dags` can take any keyword arguments available to [Airflow's DAG object](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG). Additionally, there are some gusty-specific arguments for these functions.
 
-Below we will cover all gusty-specific arguments also available in `create_dag` and `create_dags`, followed by specific `create_dag` and `create_dags` considerations.
+Below we will cover all gusty-specific arguments available in `create_dag` and `create_dags`, followed by specific `create_dag` and `create_dags` considerations. The gusty-specific arguments can also be used in a DAG's `METADATA.yml`.
 
 For the best results, it's recommended to always use keyword arguments with `create_dag` and `create_dags`.
 
@@ -24,6 +24,18 @@ To set `extra_tags` in your call to `create_dag`, provide a list like so:
 ```python
 extra_tags=["your", "extra", "tags"]
 ```
+
+### `root_tasks`
+
+You can assign certain tasks to be at the beginning of the DAG by declaring `root_tasks`, a list of task ids. Any task id that is designated as a root task cannot have a `dependencies` block.
+
+### `leaf_tasks`
+
+You can assign certain tasks to be at the end of the DAG by declaring `leaf_tasks`, a list of task ids. Any task id that is designated as a leaf task cannot have a `dependencies` block.
+
+### `external_dependencies`
+
+A list of key value pairs in the format of `dag_id: task_id`, where the `dag_id` is some upstream DAG and the `task_id` is the task in that upstream DAG. When set, gusty will create [ExternalTaskSensor](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/sensors/external_task/index.html#airflow.sensors.external_task.ExternalTaskSensor) tasks and place them at the root of the DAG. Set the `task_id` to `all` to wait for the entire upstream DAG to complete. See the section on external dependencies for more details.
 
 ### `dag_constructors`
 
@@ -89,6 +101,9 @@ parse_hooks={
 
 See gusty's built-in parsers [here](https://github.com/chriscardillo/gusty/blob/main/gusty/parsing/parsers.py). 
 
+### `ignore_subfolders`
+
+Will disable the creation of task groups from subfolders when set to `True`.
 
 ### `render_on_create`
 
