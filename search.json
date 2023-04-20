@@ -112,6 +112,27 @@
     "text": "5.3 Built-in Constructors\n\ngusty\nThere are a few built-in constructors gusty contains, primarily to make creating a DAG using METADATA.yml easy. The three built-in constructors are datetime, timedelta, and days_ago, which simply provides a datetime object for as many days ago you specify.\n\n\nABSQL\nThe YAML loading functionality for gusty is maintained in a separate, lightweight project called ABSQL.\nThe ABSQL package ships with a handful of default functions, which are also available to you as both YAML constructors and macros within gusty DAGs."
   },
   {
+    "objectID": "multi-tasking.html#multi_task_spec",
+    "href": "multi-tasking.html#multi_task_spec",
+    "title": "6  Multi-tasking",
+    "section": "6.1 multi_task_spec",
+    "text": "6.1 multi_task_spec\nImagine we want three BashOperator tasks to echo “hi”, “hey”, and “hello world”.\nWe can define all three tasks in a single Task Definition File, which we’ll call multi_greeing.yml. The name of the Task Definition File is arbitrary. Here are its contents:\noperator: airflow.operators.bash.BashOperator\nbash_command: echo $GREETING\nmulti_task_spec:\n  say_hi:\n    env:\n      GREETING: hi\n  say_hey:\n    env:\n      GREETING: hey\n  say_hello_world:\n    env:\n      GREETING: hello\n    bash_command: $GREETING world\nThe above Task Definition File will create three tasks: say_hi, say_hey, and say_hello_world. The tasks say_hi and say_hey both inherit the same bash_command, but have different env arguments. The say_hello_world task also contains its own env argument, but goes a step further as to define its own bash_command.\nThis powerful syntax allows you to keep your task definitions DRY. In this example, every task has a dedicated, unique env argument. In the case of say_hi and say_hey, they share a common bash_command. In the case of say_hello_world, it gets its own env and bash_command. Very flexible!"
+  },
+  {
+    "objectID": "multi-tasking.html#python_callable_partials",
+    "href": "multi-tasking.html#python_callable_partials",
+    "title": "6  Multi-tasking",
+    "section": "6.2 python_callable_partials",
+    "text": "6.2 python_callable_partials\nSimilar to multi_task_spec, python_callable_partials allows you to generate multiple tasks in a single file, except instead of passing arguments to an operator, you pass arguments directly to a python_callable.\nIn the example Task Definition File below, we’ll create a few tasks to fetch the past year’s stock data from yfinance for three different stock symbols: AMZN, GOOG, and MSFT.\n# ---\n# python_callable: main\n# python_callable_partials:\n#   get_amzn:\n#     symbol: AMZN\n#   get_goog:\n#     symbol: GOOG\n#   get_msft:\n#     symbol: MSFT\n# ---\n\ndef main(symbol):\n  from yfinance import Ticker\n\n  stock = Ticker(symbol)\n  history = stock.history(period='1y', interval='1d').reset_index()\n  history[\"Symbol\"] = symbol\n  return history\nThe above Task Definition File will create three tasks: get_amzn, get_goog, and get_msft. Each task will have its respective symbol passed to the the main function."
+  },
+  {
+    "objectID": "multi-tasking.html#mixing-it-up",
+    "href": "multi-tasking.html#mixing-it-up",
+    "title": "6  Multi-tasking",
+    "section": "6.3 Mixing It Up",
+    "text": "6.3 Mixing It Up\nmulti_task_spec and python_callable_partials are non-exclusive, so you can mix and match configuration as needed.\nLet’s build upon our yfinance example, and instead of using the default PythonOperator, let’s use the PythonVirtualenvOperator, and change the requirements for our get_amzn task.\n# ---\n# operator: airflow.operators.python.PythonVirtualenvOperator\n# python_callable: main\n# python_callable_partials:\n#   get_amzn:\n#     symbol: AMZN\n#   get_goog:\n#     symbol: GOOG\n#   get_msft:\n#     symbol: MSFT\n# multi_task_spec:\n#   get_amzn:\n#     requirements:\n#       - yfinance==0.1.96\n# ---\n\ndef main(symbol):\n  from yfinance import Ticker\n\n  stock = Ticker(symbol)\n  history = stock.history(period='1y', interval='1d').reset_index()\n  history[\"Symbol\"] = symbol\n  return history\nIn the above example, we changed two things:\n\nWe are now explicitly using the PythonVirtualenvOperator via the operator entry.\nOur get_amzn task also gets an entry in the multi_task_spec block, specifying a list of requirements just for our get_amzn task.\n\nWith both multi_task_spec and python_callable_partials working together, you can pretty much iterate over anything!"
+  },
+  {
     "objectID": "create-dag-args.html#gusty-specific-arguments",
     "href": "create-dag-args.html#gusty-specific-arguments",
     "title": "Appendix A — create_dag Arguments",
