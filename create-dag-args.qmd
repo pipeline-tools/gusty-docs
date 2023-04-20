@@ -1,0 +1,105 @@
+---
+title: create_dag Arguments
+number-depth: 2
+---
+
+Both `create_dag` and `create_dags` can take any keyword arguments available to [Airflow's DAG object](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG).
+
+Below we will cover all gusty-specific arguments also available in `create_dag` and `create_dags`, followed by specific `create_dag` and `create_dags` considerations.
+
+For the best results, it's recommended to always use keyword arguments with `create_dag` and `create_dags`.
+
+## gusty-specific arguments
+
+### `latest_only`
+
+By default, gusty adds a `LatestOnlyOperator` at the absolute root of your Airflow DAG, which means that - by default - the tasks is your DAG will not run except for the latest DAG run. You can read more about the `LatestOnlyOperator` in [Airflow's documentation](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/operators/latest_only/index.html#airflow.operators.latest_only.LatestOnlyOperator), but setting `latest_only=False` will ensure a gusty-generated DAG mirrors Airflow's default behavior.
+
+### `extra_tags`
+
+In addition to any tags set via an Airflow DAG's `tags` argument (available - as with any Airflow DAG parameter - in both `create_dag` and `METADATA.yml`), gusty will append any tags set in the `extra_tags` list to the provided tags.
+
+To set `extra_tags` in your call to `create_dag`, provide a list like so:
+
+```python
+extra_tags=["your", "extra", "tags"]
+```
+
+### `dag_constructors`
+
+Provide either a list of functions or a dictionary of function names names and functions (much like what you would pass to an Airflow DAG's `user_defined_macros`) to have your functions available to you both as YAML constructors with gusty as well as in Airflow anywhere `user_defined_macros` are accepted.
+
+gusty will consolidate your `user_defined_macros` and your `dag_constructors` so that all are available anywhere you'd expect. Really, you can just use the Airflow DAG object's `user_defined_macros` for everything.
+
+#### list format
+
+The list format for `dag_constructors` would look like this:
+
+```python
+dag_constructors=[your_first_func, your_second_func]
+```
+
+The functions would be accessible based on their function name.
+
+#### dictionary format
+
+The dictionary format for dag_constructors would look like this:
+
+```python
+dag_constructors={
+  "your_first_func": your_first_func,
+  "your_renamed_func": your_second_func
+  }
+```
+
+The functions would be accessible by the key name, allowing you to - as illustrated above - renamed your functions if you so desire.
+
+Again, you can just use Airflow's built-in `user_defined_macros` argument to achieve this same functionality, of having your macros available to you anywhere.
+
+### `wait_for_defaults`
+
+A dictionary of values that can be passed to an Airflow [ExternalTaskSensor](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/sensors/external_task/index.html#airflow.sensors.external_task.ExternalTaskSensor) (or [BaseOperator](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/baseoperator/index.html#airflow.models.baseoperator.BaseOperatorMeta)).
+
+### `task_group_defaults`
+
+A dictionary of values that can be passed to Airflow TaskGroup object.
+
+### `leaf_tasks_from_dict`
+
+A dictionary of tasks that you want at the end of your DAG, where the key is the name of the task, and the value is a spec for that task.
+
+```python
+leaf_tasks_from_dict={
+  "my_dag_is_done": {
+    "operator": "airflow.operators.bash.BashOperator",
+    "bash_command": "echo done"
+    }
+}
+```
+
+### `parse_hooks`
+
+If you want to parse another file type, or want to override how gusty parses supported file types, you can pass a dictionary of file extensions and functions to parse those extensions. Your functions should take a `file_path` argument.
+
+```python
+parse_hooks={
+  ".sh": your_shell_file_parsing_function
+}
+```
+
+See gusty's built-in parsers [here](https://github.com/chriscardillo/gusty/blob/main/gusty/parsing/parsers.py). 
+
+
+### `render_on_create`
+
+Disabled by default. If you want any Jinja in your spec to rendered on creation, set to `True`. Note that this will process everything every time the DAG is processed, which by default in Airflow is every few minutes. In general you don't want this on.
+
+## `create_dag` Specific Notes
+
+The first argument to `create_dag` is a path to single DAG directory containing Task Definition Files.
+
+## `create_dags` Specific Notes 
+
+The first argument to `create_dags` is a path to a directory containing multiple DAG directories, each with their own Task Definition Files.
+
+The second argument to `create_dag` should always be `globals()`, which will ensure the resulting DAG objects are discoverable by Airflow.

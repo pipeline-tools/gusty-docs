@@ -19,6 +19,8 @@ book:
         - task-dependencies.qmd
         - task-groups.qmd
         - many-dags.qmd
+  appendices: 
+    - create-dag-args.qmd
 format:
   html:
     theme: materia
