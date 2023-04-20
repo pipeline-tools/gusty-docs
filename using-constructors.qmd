@@ -63,11 +63,13 @@ The above would result in a task with 8 retries and a bash command that (when ex
 
 **An important note on the timing of function evaluation:** `double_it` is used twice above, once as a YAML constructor in the `retries` argument and once as a Jinja macro in the `bash_command` argument. The YAML constructor will be evaluated every time the DAG is generated, which is once every few minutes by default (in Airflow). The Jinja macro will only be evaluated when the task is executed.
 
-## gusty's Built-in Constructors
+## Built-in Constructors
+
+### gusty
 
 There are a few built-in constructors gusty contains, primarily to make creating a DAG using `METADATA.yml` easy. The three built-in constructors are [datetime](https://docs.python.org/3/library/datetime.html#datetime.datetime), [timedelta](https://docs.python.org/3/library/datetime.html#datetime.timedelta), and `days_ago`, which simply provides a datetime object for as many days ago you specify.
 
-## ABSQL Constructors
+### ABSQL
 
 The YAML loading functionality for gusty is maintained in a separate, lightweight project called [ABSQL](https://pypi.org/project/ABSQL/).
 
