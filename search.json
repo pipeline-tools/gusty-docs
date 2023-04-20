@@ -105,18 +105,11 @@
     "text": "5.2 Using Constructors with gusty\ngusty makes it easy for you to leverage YAML contructors. The simplest way to leverage your functions as YAML constructors within gusty is to use the Airflow DAG object’s built-in user_defined_macros argument. When you pass a dictionary of functions/macros to user_defined_macros, gusty will make all of those functions/macros available to you as YAML constructors.\nYour call to create_dag might look something like this:\ncreate_dag(\n  ...,\n  user_defined_macros={\n    \"double_it\": double_it\n  }\n)\nThen, in a Task Definition File, you could leverage double_it both as a YAML constructor, as well as - just as in any other Airflow task - using Jinja. Here’s a BashOperator example below.\noperator: airflow.operators.bash.BashOperator\nretries: !double_it 4\nbash_command: echo {{ double_it(\"hello\") }}\nThe above would result in a task with 8 retries and a bash command that (when executed) would echo hellohello.\nAn important note on the timing of function evaluation: double_it is used twice above, once as a YAML constructor in the retries argument and once as a Jinja macro in the bash_command argument. The YAML constructor will be evaluated every time the DAG is generated, which is once every few minutes by default (in Airflow). The Jinja macro will only be evaluated when the task is executed."
   },
   {
-    "objectID": "using-constructors.html#gustys-built-in-constructors",
-    "href": "using-constructors.html#gustys-built-in-constructors",
+    "objectID": "using-constructors.html#built-in-constructors",
+    "href": "using-constructors.html#built-in-constructors",
     "title": "5  Using Constructors",
-    "section": "5.3 gusty’s Built-in Constructors",
-    "text": "5.3 gusty’s Built-in Constructors\nThere are a few built-in constructors gusty contains, primarily to make creating a DAG using METADATA.yml easy. The three built-in constructors are datetime, timedelta, and days_ago, which simply provides a datetime object for as many days ago you specify."
-  },
-  {
-    "objectID": "using-constructors.html#absql-constructors",
-    "href": "using-constructors.html#absql-constructors",
-    "title": "5  Using Constructors",
-    "section": "5.4 ABSQL Constructors",
-    "text": "5.4 ABSQL Constructors\nThe YAML loading functionality for gusty is maintained in a separate, lightweight project called ABSQL.\nThe ABSQL package ships with a handful of default functions, which are also available to you as both YAML constructors and macros within gusty DAGs."
+    "section": "5.3 Built-in Constructors",
+    "text": "5.3 Built-in Constructors\n\ngusty\nThere are a few built-in constructors gusty contains, primarily to make creating a DAG using METADATA.yml easy. The three built-in constructors are datetime, timedelta, and days_ago, which simply provides a datetime object for as many days ago you specify.\n\n\nABSQL\nThe YAML loading functionality for gusty is maintained in a separate, lightweight project called ABSQL.\nThe ABSQL package ships with a handful of default functions, which are also available to you as both YAML constructors and macros within gusty DAGs."
   },
   {
     "objectID": "create-dag-args.html#gusty-specific-arguments",
