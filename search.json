@@ -67,7 +67,7 @@
     "href": "task-groups.html#task-group-metadata.yml",
     "title": "3  Task Groups",
     "section": "3.1 Task Group METADATA.yml",
-    "text": "3.1 Task Group METADATA.yml\nYou can add a METADATA.yml file to any task group folder. This is useful for when you want to have specific task group behavior, such as different default_args or if you want to prefix or suffix the task group id onto the task id.\nLet’s add a METADATA.yml file to our spanish task group subfolder:\ndags/\n│\n├── hello_dag/\n│   │\n│   ├── english/\n│   │   ├── hello.yml\n│   │   ├── hey.sql\n│   │   └── hi.py\n│   │\n│   ├── french/\n│   │   ├── bonjour.py\n│   │   ├── bonsoir.sql\n│   │   └── salut.yml\n│   │\n│   ├── spanish/\n│   │   ├── METADATA.yml\n│   │   ├── hola.py\n│   │   ├── oye.sql\n│   │   └── saludos.yml\n│   │\n│   └── METADATA.yml\n│\n└── hello_dag.py\nThe contents of this task group METADATA.yml file might look something like this:\ntooltip: \"This task group contains Spanish greetings.\"\nprefix_group_id: True\nThe above METADATA.yml will give the spanish task group a tooltip, when hoving over the node in Airflow’s task group, and all tasks in the task group will be prefixed with spanish_, such as spanish_oye and spanish_saludos.\nLastly, just like tasks, task group METADATA.yml can take advantage of dependencies blocks. So if a lot of tasks depend on the same upstream task, it might make sense to put them in the same task group folder, and set the upstream dependency in the METADATA.yml."
+    "text": "3.1 Task Group METADATA.yml\nYou can add a METADATA.yml file to any task group folder. This is useful for when you want to have specific task group behavior, such as different default_args or if you want to prefix or suffix the task group id onto the task id.\nLet’s add a METADATA.yml file to our spanish task group subfolder:\ndags/\n│\n├── hello_dag/\n│   │\n│   ├── english/\n│   │   ├── hello.yml\n│   │   ├── hey.sql\n│   │   └── hi.py\n│   │\n│   ├── french/\n│   │   ├── bonjour.py\n│   │   ├── bonsoir.sql\n│   │   └── salut.yml\n│   │\n│   ├── spanish/\n│   │   ├── METADATA.yml\n│   │   ├── hola.py\n│   │   ├── oye.sql\n│   │   └── saludos.yml\n│   │\n│   └── METADATA.yml\n│\n└── hello_dag.py\nThe contents of this task group METADATA.yml file might look something like this:\ntooltip: \"This task group contains Spanish greetings.\"\nprefix_group_id: True\nThe above METADATA.yml will give the spanish task group a tooltip, when hoving over the node in the Airflow UI’s graph view, and all tasks in the task group will be prefixed with spanish_, such as spanish_oye and spanish_saludos.\nLastly, just like tasks, task group METADATA.yml can take advantage of dependencies blocks. So if a lot of tasks depend on the same upstream task, it might make sense to put them in the same task group folder, and set the upstream dependency in the METADATA.yml."
   },
   {
     "objectID": "task-groups.html#why-use-task-group-folders",
@@ -89,6 +89,34 @@
     "title": "4  Many DAGs",
     "section": "4.2 The Power of create_dags",
     "text": "4.2 The Power of create_dags\nThe value in create_dags is that multiple DAGs can be created with common schedules, default arguments, tags, and more, plus each DAG can contain DAG-specific information, such as documentation (e.g. description and doc_md) and tags, inside their own METADATA.yml.\nIn gusty, METADATA.yml takes precedence over any create_dag argument, so you can override anything set in create_dags with the DAG-specific METADATA.yml.\n\nNow you have the building blocks to use file-oriented orchestration in Airflow with gusty!"
+  },
+  {
+    "objectID": "using-constructors.html#what-are-constructors",
+    "href": "using-constructors.html#what-are-constructors",
+    "title": "5  Using Constructors",
+    "section": "5.1 What are Constructors?",
+    "text": "5.1 What are Constructors?\nConstructors are functions you can invoke in your YAML. These functions are invoked every time your Task Definition File is loaded during gusty’s DAG creation process.\nConstructors are available to us thanks the PyYAML package.\nTo better understand constructors, let’s orient ourselves around a simple Python function, called double_it:\ndef double_it(x):\n  return x + x\nIf we were to run double_it(2), we’d get back 4.\nTo invoke double_it from YAML, we begin our value entry with an exclaimation point (!), as illustrated below:\nsome_argument: !double_it 2\nWhen this YAML is loaded, the argument some_argument in our YAML will be assigned the value 4.\nYou can also use keyword arguments (i.e. double_it(x=2)) with constructors:\nsome_argument: !double_it\n  x: 2\nThe above will still result in some_argument taking on the value of 4."
+  },
+  {
+    "objectID": "using-constructors.html#using-constructors-with-gusty",
+    "href": "using-constructors.html#using-constructors-with-gusty",
+    "title": "5  Using Constructors",
+    "section": "5.2 Using Constructors with gusty",
+    "text": "5.2 Using Constructors with gusty\ngusty makes it easy for you to leverage YAML contructors. The simplest way to leverage your functions as YAML constructors within gusty is to use the Airflow DAG object’s built-in user_defined_macros argument. When you pass a dictionary of functions/macros to user_defined_macros, gusty will make all of those functions/macros available to you as YAML constructors.\nYour call to create_dag might look something like this:\ncreate_dag(\n  ...,\n  user_defined_macros={\n    \"double_it\": double_it\n  }\n)\nThen, in a Task Definition File, you could leverage double_it both as a YAML constructor, as well as - just as in any other Airflow task - using Jinja. Here’s a BashOperator example below.\noperator: airflow.operators.bash.BashOperator\nretries: !double_it 4\nbash_command: echo {{ double_it(\"hello\") }}\nThe above would result in a task with 8 retries and a bash command that (when executed) would echo hellohello.\nAn important note on the timing of function evaluation: double_it is used twice above, once as a YAML constructor in the retries argument and once as a Jinja macro in the bash_command argument. The YAML constructor will be evaluated every time the DAG is generated, which is once every few minutes by default (in Airflow). The Jinja macro will only be evaluated when the task is executed."
+  },
+  {
+    "objectID": "using-constructors.html#gustys-built-in-constructors",
+    "href": "using-constructors.html#gustys-built-in-constructors",
+    "title": "5  Using Constructors",
+    "section": "5.3 gusty’s Built-in Constructors",
+    "text": "5.3 gusty’s Built-in Constructors\nThere are a few built-in constructors gusty contains, primarily to make creating a DAG using METADATA.yml easy. The three built-in constructors are datetime, timedelta, and days_ago, which simply provides a datetime object for as many days ago you specify."
+  },
+  {
+    "objectID": "using-constructors.html#absql-constructors",
+    "href": "using-constructors.html#absql-constructors",
+    "title": "5  Using Constructors",
+    "section": "5.4 ABSQL Constructors",
+    "text": "5.4 ABSQL Constructors\nThe YAML loading functionality for gusty is maintained in a separate, lightweight project called ABSQL.\nThe ABSQL package ships with a handful of default functions, which are also available to you as both YAML constructors and macros within gusty DAGs."
   },
   {
     "objectID": "create-dag-args.html#gusty-specific-arguments",
