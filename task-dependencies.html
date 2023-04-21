@@ -362,6 +362,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3 class="anchored" data-anchor-id="external-dependencies-in-metadata.yml">External Dependencies in METADATA.yml</h3>
 <p>As an Airflow project grows, you might find that more and more of your tasks have the same external dependency, or sometimes DAGs just logically <em>should</em> depend on one another (e.g.&nbsp;a DAG that ingests data should precede a DAG that transforms that data). For these cases, you can utilize the same exact same <code>external_dependencies</code> block in any <code>METADATA.yml</code> file.</p>
 <p>When you specify an external dependency in a <code>METADATA.yml</code> file, the <code>ExternalTaskSensor</code> task will be placed at the root of the DAG, ensuring that no tasks in the DAG run before the <code>ExternalTaskSensor</code> task completes.</p>
+<p>Here’s what it would like like if we took the same external dependency from above and place it in an <code>external_dependencies</code> block in <code>METADATA.yml</code> instead:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="media/images/dependencies/dag-ext-dep.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+<p>The <code>ExternalTaskSensor</code> now precedes every other task in the graph.</p>
 </section>
 <section id="offset-schedules" class="level3">
 <h3 class="anchored" data-anchor-id="offset-schedules">Offset Schedules</h3>
