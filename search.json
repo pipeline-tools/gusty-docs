@@ -147,6 +147,13 @@
     "text": "7.2 Running Notebooks\n\nHow It Works\n\nJust like task_id is a special keyword you can add to your custom operator’s __init__ method, so is file_path.\nfile_path will be an absolute path to your Task Definition File, in this case a Jupyter Notebook.\nDeclare a YAML cell in your Jupyter Notebook, specifying the operator that should run the cell.\nHave your custom operator run the cell.\n\n\n\nExample Operator\nWe’ll more or less take this example directly from the gusty demo.\nTo make our custom operator we will use:\n\nThe built-in BashOperator, for running the command that renders the notebook.\nThe nbconvert package to render the notebook.\n\nOur operator will simply render the notebook as HTML and then delete it.\nfrom airflow.operators.bash_operator import BashOperator\n\ncommand_template = \"\"\"\njupyter nbconvert --to html --execute {file_path} || exit 1; rm -f {rendered_output}\n\"\"\"\n\nclass JupyterOperator(BashOperator):\n    \"\"\"\n    The LocalJupyterOperator executes the Jupyter Notebook.\n    Note that it is up to the notebook itself to handle connecting\n    to a database. (But it can grab this from Airflow connections)\n    \"\"\"\n\n    def __init__(\n      self,\n      # gusty automatically passes in file_path when creating the task\n      file_path,\n      *args,\n      **kwargs):\n      \n        self.file_path = file_path\n        self.rendered_output = self.file_path.replace('.ipynb', '.html')\n\n        command = command_template.format(file_path = self.file_path,\n                                          rendered_output = self.rendered_output)\n\n        super(JupyterOperator, self).__init__(bash_command = command, *args, **kwargs)\n\n\nExample Usage\nSee the Juypter Notebook Task Definition File example in the gusty demo, in the stock_predictions DAG. Notice how the first cell in the notebook is a YAML cell (see Raw notebook)."
   },
   {
+    "objectID": "example-projects.html",
+    "href": "example-projects.html",
+    "title": "8  Example Projects",
+    "section": "",
+    "text": "There are a few example projects which utilize gusty if you want to try it out.\n\ngusty-demo - This project includes examples of using custom operators, multiple programming languages, and file formats to make (bad) stock predictions.\ngusty-demo-lite - This project includes just enough to get up and runninng."
+  },
+  {
     "objectID": "create-dag-args.html#gusty-specific-arguments",
     "href": "create-dag-args.html#gusty-specific-arguments",
     "title": "Appendix A — create_dag Arguments",
