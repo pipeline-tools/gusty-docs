@@ -32,10 +32,15 @@ multi_task_spec:
   say_hello_world:
     env:
       GREETING: hello
-    bash_command: $GREETING world
+    bash_command: echo $GREETING world
 ```
 
 The above Task Definition File will create three tasks: `say_hi`, `say_hey`, and `say_hello_world`. The tasks `say_hi` and `say_hey` both inherit the same `bash_command`, but have different `env` arguments. The `say_hello_world` task also contains its own `env` argument, but goes a step further as to define its own `bash_command`.
+
+This `multi_task_spec` produces the following graph:
+
+
+![](media/images/multi-tasking/multi-hello.png){fig-align="center"}
 
 This powerful syntax allows you to keep your task definitions [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself). In this example, every task has a dedicated, unique `env` argument. In the case of `say_hi` and `say_hey`, they share a common `bash_command`. In the case of `say_hello_world`, it gets its own `env` and `bash_command`. Very flexible!
 
@@ -63,10 +68,12 @@ def main(symbol):
   stock = Ticker(symbol)
   history = stock.history(period='1y', interval='1d').reset_index()
   history["Symbol"] = symbol
-  return history
+  print(history.head())
 ```
 
 The above Task Definition File will create three tasks: `get_amzn`, `get_goog`, and `get_msft`. Each task will have its respective `symbol` passed to the the `main` function.
+
+![](media/images/multi-tasking/multi-stock.png){fig-align="center"}
 
 ## Mixing It Up
 
@@ -97,7 +104,7 @@ def main(symbol):
   stock = Ticker(symbol)
   history = stock.history(period='1y', interval='1d').reset_index()
   history["Symbol"] = symbol
-  return history
+  print(history.head())
 ```
 
 In the above example, we changed two things:
