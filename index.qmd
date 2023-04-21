@@ -1,19 +1,19 @@
 # Preface {.unnumbered}
 
-Orchestration, or the routine scheduling and exection of dependent tasks, is a core component of modern data work. Orchestration continues to reach more and more data workers - it was originally a focus for data engineers, but it now permeates the work of data analysts, analytics engineers, data scientists, and machine learning engineers. The easier it is for any class of data worker to orchestrate their code, the easier it is for any member of an organization to derive value from the outputs of that code.
+Orchestration, or the routine scheduling and exection of dependent tasks, is a core component of modern data work. Orchestration continues to reach more and more data workers - it was originally a focus for data engineers, but it now permeates the work of data analysts, analytics engineers, data scientists, and machine learning engineers. The easier it is for any class of data worker to orchestrate their code, the easier it is for any member of an organization to derive value from the output of that code.
 
 ## Flavors of Orchestration Code
 
 Orchestration with Python is a vast and opinionated landscape, but there are three clear flavors of orchestration to have emerged over time:
 
-1. **Object-oriented** orchestration, where tasks are objects and dependencies between tasks are handled with methods. [Airflow's classic style ](https://airflow.apache.org/docs/apache-airflow/stable/tutorial/fundamentals.html#example-pipeline-definition) is a good example of object-oriented orchestration.
+1. **Object-oriented** orchestration, where tasks are objects and dependencies between tasks are handled with methods or operators (e.g. `>>`). [Airflow's classic style ](https://airflow.apache.org/docs/apache-airflow/stable/tutorial/fundamentals.html#example-pipeline-definition) is a good example of object-oriented orchestration.
 
-2. **Decorative** orchestration, where tasks are functions and decorators are used to configure the tasks. Dependencies are often managed by passing the output of one function into the input of another. [Airflow's taskflow API](https://airflow.apache.org/docs/apache-airflow/stable/tutorial/taskflow.html#example-taskflow-api-pipeline) and [Dagster's entire API](https://docs.dagster.io/0.14.20/tutorial/ops-jobs/single-op-job#hello-op) are good examples of decorative orchestation.
+2. **Decorative** orchestration, where tasks are functions and decorators are used to configure the tasks. Dependencies are often managed by passing the output of one function to the input of another. [Airflow's taskflow API](https://airflow.apache.org/docs/apache-airflow/stable/tutorial/taskflow.html#example-taskflow-api-pipeline) and [Dagster's entire API](https://docs.dagster.io/0.14.20/tutorial/ops-jobs/single-op-job#hello-op) are good examples of decorative orchestation.
 
-3. **File-oriented** orchestration, where tasks are files, and dependencies are cleverly inferred or declared explicitly. Tools like [Mage](https://www.mage.ai/), [dbt](https://www.getdbt.com/), and [Orchest](https://www.orchest.io/) exemplify file-oriented orchestration.
+3. **File-oriented** orchestration, where tasks are files, and dependencies are cleverly inferred or explicitly declared. Tools like [Mage](https://www.mage.ai/), [dbt](https://www.getdbt.com/), and [Orchest](https://www.orchest.io/) exemplify file-oriented orchestration.
 
 ## What is gusty?
 
 gusty is a file-oriented framework for [Airflow](https://airflow.apache.org/), the absolute standard for orchestrators today. Airflow is a Top-Level Apache Project with sustained development, a gigantic ecosystem of [provider packages](https://airflow.apache.org/docs/#providers-packagesdocsapache-airflow-providersindexhtml), and is offered as a hosted service by major public clouds and other Airflow-focused companies. While other orchestrators natively support file-oriented orchestration, Airflow is such a good orchestrator that it was compelling to create a file-oriented framework for it. If you are reading this, you are likely already familiar with - or using - Airflow.
 
-gusty exists to make file-oriented orchestration fun and easy using Airflow, allowing for file-oriented DAGs to be incorporated in existing Airflow projects without any need to change existing work or Airflow code. You can use any Airflow operator with gusty. This document hopes to serve as a guide for getting the most out of file-oriented orchestration in Airflow using gusty.
+gusty exists to make file-oriented orchestration fun and easy using Airflow, allowing for file-oriented DAGs to be incorporated in existing Airflow projects without any need to change existing work or Airflow code. You can use any Airflow operator with gusty; gusty is simply a different way to write Airflow DAGs. This document hopes to serve as a guide for getting the most out of file-oriented orchestration in Airflow using gusty.
