@@ -15,9 +15,9 @@ Custom operators are a great way to get even more out of gusty. Two great use ca
 
 1. In gusty, the task name is the file name.
 
-2. gusty (optionally) makes available to your custom operators a `task_id`, which is the file name. Just specify `task_id` as an argument in the operator's `__init__` method, and gusty will pass it in when building your task.
+2. gusty (optionally) makes available to your custom operators a `task_id`, which is the task name. Just specify `task_id` as an argument in the operator's `__init__` method, and gusty will pass it in when building your task.
 
-3. If you name your SQL tables after the `task_id`, you can detect table names, which in turn can be used as a list of dependencies.
+3. If you name your SQL tables after the `task_id`, you can detect table names in your SQL, which in turn can be leveraged as a list of dependencies.
 
 4. If you attach this list of dependencies as an attribute on your custom operator, gusty automatically wires up these dependencies for you.
 
@@ -125,6 +125,8 @@ WHERE DATE(created_at) = CURRENT_DATE()
 ```
 
 In our Airflow DAG graph, the `new_users` task now automatically depends on the `users` task!
+
+![](media/images/custom-operators/auto-deps.png){fig-align="center"}
 
 ## Running Notebooks
 
