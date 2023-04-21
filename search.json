@@ -166,5 +166,40 @@
     "title": "Appendix A — create_dag Arguments",
     "section": "A.3 create_dags Specific Notes",
     "text": "A.3 create_dags Specific Notes\nThe first argument to create_dags is a path to a directory containing multiple DAG directories, each with their own Task Definition Files.\nThe second argument to create_dag should always be globals(), which will ensure the resulting DAG objects are discoverable by Airflow."
+  },
+  {
+    "objectID": "supported-file-types.html#yml",
+    "href": "supported-file-types.html#yml",
+    "title": "Appendix B — Supported file types",
+    "section": ".yml",
+    "text": ".yml\n\nBehavior\nDeclare an operator and pass in any operator parameters using YAML.\n\n\nExample\noperator: airflow.operators.bash.BashOperator\nbash_command: echo hello world"
+  },
+  {
+    "objectID": "supported-file-types.html#py",
+    "href": "supported-file-types.html#py",
+    "title": "Appendix B — Supported file types",
+    "section": ".py",
+    "text": ".py\n\nBehavior\nFor starters, you can just write Python code and by default gusty will execute your file using a PythonOperator.\nTo expand, you can declare a python_callable in the Frontmatter and define the function in the body.\nWhile default behavior for .py files specifies PythonOperator as the operator, as with any Task Definition File, you can specify any operator.\n\n\nExample\nA Task Definition File, hello_world.py, with no Frontmatter:\nprint(\"hello world\")\nA task_definition file, hello_world.py, with Frontmatter:\n# ---\n# python_callable: main\n# ---\n\ndef main():\n  print(\"hello world\")\nThe callable name is up to you, but it must match the function name in the Body."
+  },
+  {
+    "objectID": "supported-file-types.html#sql",
+    "href": "supported-file-types.html#sql",
+    "title": "Appendix B — Supported file types",
+    "section": ".sql",
+    "text": ".sql\n\nBehavior\nDeclare an operator in a YAML header, then write SQL in the main .sql file. The SQL automatically gets sent to the operator.\n\n\nExample\n---\noperator: airflow.providers.sqlite.operators.sqlite.SqliteOperator\n---\n\nSELECT 'hello world'"
+  },
+  {
+    "objectID": "supported-file-types.html#ipynb",
+    "href": "supported-file-types.html#ipynb",
+    "title": "Appendix B — Supported file types",
+    "section": ".ipynb",
+    "text": ".ipynb\n\nBehavior\nPut a YAML block at the top of your notebook and specify an operator that renders your Jupyter Notebook.\n\n\nExample\nSee the gusty demo Jupyter Notebook Example."
+  },
+  {
+    "objectID": "supported-file-types.html#rmd",
+    "href": "supported-file-types.html#rmd",
+    "title": "Appendix B — Supported file types",
+    "section": ".Rmd",
+    "text": ".Rmd\n\nBehavior\nUse the YAML block at the top of your notebook and specify an operator that renders your R Markdown Document.\n\n\nExample\nSee the gusty demo Rmd Example."
   }
 ]
