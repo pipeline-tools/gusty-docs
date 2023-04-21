@@ -23,6 +23,7 @@ book:
       chapters:
         - using-constructors.qmd
         - multi-tasking.qmd
+        - custom-operators.qmd
   appendices: 
     - create-dag-args.qmd
 format:
