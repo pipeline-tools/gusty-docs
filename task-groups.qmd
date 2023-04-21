@@ -34,6 +34,8 @@ $AIRFLOW_HOME/dags/
 
 Now, our Airflow DAG will have three task groups: `english`, `french`, and `spanish`. Each task group will contain the tasks found in each folder. For example, the `french` task group will contain tasks `bonjour`, `bonsoir`, and `salut`.
 
+![](media/images/task-groups/french-tasks.png){fig-align="center"}
+
 By default, gusty does *not* prefix a task group's name on to the task name. Any altering of a task name inside of a task group is done so explcitly. How? Just like DAG folders, task group folders can also leverage their own `METADATA.yml` files.
 
 ## Task Group METADATA.yml
@@ -76,6 +78,15 @@ prefix_group_id: True
 ```
 
 The above `METADATA.yml` will give the `spanish` task group a tooltip, when hoving over the node in the Airflow UI's graph view, and all tasks in the task group will be prefixed with `spanish_`, such as `spanish_oye` and `spanish_saludos`.
+
+Here is a look at the tooltip on hover:
+
+![](media/images/task-groups/spanish-tooltip.png){fig-align="center"}
+
+And here is look at the prefixed Spanish tasks:
+
+
+![](media/images/task-groups/spanish-tasks.png){fig-align="center"}
 
 Lastly, just like tasks, task group `METADATA.yml` can take advantage of `dependencies` blocks. So if a lot of tasks depend on the same upstream task, it might make sense to put them in the same task group folder, and set the upstream dependency in the `METADATA.yml`.
 
