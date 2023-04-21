@@ -26,6 +26,7 @@ book:
         - custom-operators.qmd
   appendices: 
     - create-dag-args.qmd
+    - supported-file-types.qmd
 format:
   html:
     theme: materia

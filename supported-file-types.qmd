@@ -1,0 +1,91 @@
+---
+title: Supported file types
+number-depth: 1
+---
+
+Below is a list of supported file types and how they work out of the box.
+
+You can always use [parse hooks](create-dag-args.qmd#parse_hooks) to add additional file types for your use cases, or override gusty's default parsers.
+
+All Airflow task ids are the Task Definition Files' file names.
+
+## `.yml`
+
+### Behavior
+
+Declare an `operator` and pass in any operator parameters using YAML.
+
+### Example
+
+```yaml
+operator: airflow.operators.bash.BashOperator
+bash_command: echo hello world
+```
+
+
+## `.py`
+
+### Behavior
+
+For starters, you can just write Python code and by default gusty will execute your file using a `PythonOperator`.
+
+To expand, you can declare a `python_callable` in the Frontmatter and define the function in the body.
+
+While default behavior for `.py` files specifies `PythonOperator` as the `operator`, as with any Task Definition File, you can specify any `operator`.
+
+### Example
+
+A Task Definition File, `hello_world.py`, with no Frontmatter:
+
+```python
+print("hello world")
+```
+
+A task_definition file, `hello_world.py`, with Frontmatter:
+
+```python
+# ---
+# python_callable: main
+# ---
+
+def main():
+  print("hello world")
+```
+
+The callable name is up to you, but it must match the function name in the Body.
+
+## `.sql`
+
+### Behavior
+
+Declare an `operator` in a YAML header, then write SQL in the main .sql file. The SQL automatically gets sent to the operator.
+
+### Example
+
+```sql
+---
+operator: airflow.providers.sqlite.operators.sqlite.SqliteOperator
+---
+
+SELECT 'hello world'
+```
+
+## `.ipynb`
+
+### Behavior
+
+Put a YAML block at the top of your notebook and specify an `operator` that renders your Jupyter Notebook.
+
+### Example
+
+See the [gusty demo Jupyter Notebook Example](https://github.com/chriscardillo/gusty-demo/blob/main/airflow/dags/stock_predictions/stock_data.ipynb).
+
+## `.Rmd`
+
+### Behavior
+
+Use the YAML block at the top of your notebook and specify an `operator` that renders your R Markdown Document.
+
+### Example
+
+See the [gusty demo Rmd Example](https://github.com/chriscardillo/gusty-demo/blob/main/airflow/dags/stock_predictions/model_predictions.Rmd).
