@@ -86,6 +86,12 @@ As an Airflow project grows, you might find that more and more of your tasks hav
 
 When you specify an external dependency in a `METADATA.yml` file, the `ExternalTaskSensor` task will be placed at the root of the DAG, ensuring that no tasks in the DAG run before the `ExternalTaskSensor` task completes.
 
+Here's what it would like like if we took the same external dependency from above and place it in an `external_dependencies` block in `METADATA.yml` instead:
+
+![](media/images/dependencies/dag-ext-dep.png){fig-align="center"}
+
+The `ExternalTaskSensor` now precedes every other task in the graph.
+
 ### Offset Schedules
 
 Understandably, but frustratingly, the default behavior of Airflow's `ExternalTaskSensor` is to look for [DAG runs](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dag-run.html#dag-runs) that have that have ran at the same "logical date". This means that if you have one DAG scheduled to run daily at 00:00 UTC (`"0 0 * * *"`), let's call this DAG `earlier_dag`, and another DAG scheduled to run daily at 06:00 UTC (`"0 6 * * *"`), let's call this DAG `later_dag`, and you specify an external dependency between `later_dag` and `earlier_dag`, the default syntax for an `external_dependencies` block will not work, because - in the case where `later_dag` depends on `earlier_dag` - the `ExternalTaskSensor` in `later_dag` will be looking for an 06:00 UTC DAG run of `earlier_dag`, which does not exist.
