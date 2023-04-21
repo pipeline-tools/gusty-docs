@@ -27,6 +27,10 @@ $AIRFLOW_HOME/dags/
 └── hello_dag.py
 ```
 
+The contents of this `hello_dag` folder will produce the Airflow DAG seen below.
+
+![](media/images/basics/hello_dag.png){fig-align="center"}
+
 In the event you wanted to create a second gusty DAG, you can just repeat this pattern. For example, if we wanted to add `goodbye_dag`:
 
 ```sh
@@ -47,8 +51,6 @@ $AIRFLOW_HOME/dags/
 ├── goodbye_dag.py
 └── hello_dag.py
 ```
-
----
 
 ## Task Definition Files
 
