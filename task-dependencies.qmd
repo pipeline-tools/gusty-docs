@@ -28,6 +28,8 @@ bash_command: echo hello
 
 Now, in our Airflow UI, our DAG graph will show that `hi` precedes `hello`. 
 
+![](media/images/dependencies/hi-before-hello.png){fig-align="center"}
+
 Remember, in gusty, the file name (minus the file extension) becomes the task id, so you do not need to specify `hi.py`, just `hi`.
 
 You can list as many dependencies as you need to for any task.
@@ -57,6 +59,8 @@ bash_command: echo hello
 
 The result will be a new `ExternalTaskSensor` task with the task id `wait_for_upstream_dag_upstream_task`, preceding the existing `hello` task.
 
+![](media/images/dependencies/add-ext-dep.png){fig-align="center"}
+
 As with `dependencies`, you can list as many external dependecies as you require.
 
 ### Whole DAG External Dependency
@@ -73,6 +77,8 @@ bash_command: echo hello
 ```
 
 The result will be a new `ExternalTaskSensor` task with the task id `wait_for_DAG_upstream_dag`, preceding the existing `hello` task.
+
+![](media/images/dependencies/add-dag-ext-dep.png){fig-align="center"}
 
 ### External Dependencies in METADATA.yml
 
