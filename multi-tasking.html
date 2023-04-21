@@ -311,8 +311,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">say_hello_world</span><span class="kw">:</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">env</span><span class="kw">:</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">GREETING</span><span class="kw">:</span><span class="at"> hello</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">bash_command</span><span class="kw">:</span><span class="at"> $GREETING world</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">bash_command</span><span class="kw">:</span><span class="at"> echo $GREETING world</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The above Task Definition File will create three tasks: <code>say_hi</code>, <code>say_hey</code>, and <code>say_hello_world</code>. The tasks <code>say_hi</code> and <code>say_hey</code> both inherit the same <code>bash_command</code>, but have different <code>env</code> arguments. The <code>say_hello_world</code> task also contains its own <code>env</code> argument, but goes a step further as to define its own <code>bash_command</code>.</p>
+<p>This <code>multi_task_spec</code> produces the following graph:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="media/images/multi-tasking/multi-hello.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 <p>This powerful syntax allows you to keep your task definitions <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself">DRY</a>. In this example, every task has a dedicated, unique <code>env</code> argument. In the case of <code>say_hi</code> and <code>say_hey</code>, they share a common <code>bash_command</code>. In the case of <code>say_hello_world</code>, it gets its own <code>env</code> and <code>bash_command</code>. Very flexible!</p>
 </section>
 <section id="python_callable_partials" class="level2" data-number="6.2">
@@ -336,8 +342,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  stock <span class="op">=</span> Ticker(symbol)</span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  history <span class="op">=</span> stock.history(period<span class="op">=</span><span class="st">'1y'</span>, interval<span class="op">=</span><span class="st">'1d'</span>).reset_index()</span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  history[<span class="st">"Symbol"</span>] <span class="op">=</span> symbol</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> history</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(history.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The above Task Definition File will create three tasks: <code>get_amzn</code>, <code>get_goog</code>, and <code>get_msft</code>. Each task will have its respective <code>symbol</code> passed to the the <code>main</code> function.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="media/images/multi-tasking/multi-stock.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </section>
 <section id="mixing-it-up" class="level2" data-number="6.3">
 <h2 data-number="6.3" class="anchored" data-anchor-id="mixing-it-up"><span class="header-section-number">6.3</span> Mixing It Up</h2>
@@ -365,7 +376,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  stock <span class="op">=</span> Ticker(symbol)</span>
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  history <span class="op">=</span> stock.history(period<span class="op">=</span><span class="st">'1y'</span>, interval<span class="op">=</span><span class="st">'1d'</span>).reset_index()</span>
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  history[<span class="st">"Symbol"</span>] <span class="op">=</span> symbol</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> history</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(history.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>In the above example, we changed two things:</p>
 <ul>
 <li><p>We are now explicitly using the <code>PythonVirtualenvOperator</code> via the <code>operator</code> entry.</p></li>
