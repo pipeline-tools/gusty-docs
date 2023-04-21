@@ -103,9 +103,9 @@ Here are the contents of our `hi.py` file:
 # ---
 
 def say_hi():
-  phrase = "hi"
-  print(phrase)
-  return phrase
+  greeeting = "hi"
+  print(greeeting)
+  return greeeting
 ```
 
 The resulting task would contain a `PythonOperator` with the task id `hi`.
