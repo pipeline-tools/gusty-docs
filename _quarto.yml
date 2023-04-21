@@ -24,6 +24,9 @@ book:
         - using-constructors.qmd
         - multi-tasking.qmd
         - custom-operators.qmd
+    - part: "In Practice"
+      chapters:
+        - example-projects.qmd
   appendices: 
     - create-dag-args.qmd
     - supported-file-types.qmd
