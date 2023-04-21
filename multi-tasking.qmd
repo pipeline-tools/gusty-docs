@@ -9,7 +9,7 @@ Sometimes orchestration involves repetition. For example, you might have a DAG w
 
 - `python_callable_partials` - For iterating over arguments to be passed to the function assigned to a `python_callable` argument.
 
-In both `multi_task_spec` and `python_callable_partials`, the keys below each block will be the task id for a given task, and the arguments below each task id will be passed to that task or callable, respectively.
+In both `multi_task_spec` and `python_callable_partials`, the keys below each block will be the task id for a given task, and the arguments below each task id will be passed to that operator or callable, respectively.
 
 We'll look at examples of each below.
 
