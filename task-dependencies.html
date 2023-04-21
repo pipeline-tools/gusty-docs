@@ -311,6 +311,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> hi</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">bash_command</span><span class="kw">:</span><span class="at"> echo hello</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Now, in our Airflow UI, our DAG graph will show that <code>hi</code> precedes <code>hello</code>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="media/images/dependencies/hi-before-hello.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 <p>Remember, in gusty, the file name (minus the file extension) becomes the task id, so you do not need to specify <code>hi.py</code>, just <code>hi</code>.</p>
 <p>You can list as many dependencies as you need to for any task.</p>
 </section>
@@ -330,6 +335,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">upstream_dag</span><span class="kw">:</span><span class="at"> upstream_task</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">bash_command</span><span class="kw">:</span><span class="at"> echo hello</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The result will be a new <code>ExternalTaskSensor</code> task with the task id <code>wait_for_upstream_dag_upstream_task</code>, preceding the existing <code>hello</code> task.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="media/images/dependencies/add-ext-dep.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 <p>As with <code>dependencies</code>, you can list as many external dependecies as you require.</p>
 </section>
 <section id="whole-dag-external-dependency" class="level3">
@@ -342,6 +352,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">upstream_dag</span><span class="kw">:</span><span class="at"> all</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">bash_command</span><span class="kw">:</span><span class="at"> echo hello</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The result will be a new <code>ExternalTaskSensor</code> task with the task id <code>wait_for_DAG_upstream_dag</code>, preceding the existing <code>hello</code> task.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="media/images/dependencies/add-dag-ext-dep.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </section>
 <section id="external-dependencies-in-metadata.yml" class="level3">
 <h3 class="anchored" data-anchor-id="external-dependencies-in-metadata.yml">External Dependencies in METADATA.yml</h3>
