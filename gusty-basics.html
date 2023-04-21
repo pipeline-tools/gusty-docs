@@ -368,9 +368,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ---</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> say_hi():</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  phrase <span class="op">=</span> <span class="st">"hi"</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(phrase)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> phrase</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  greeeting <span class="op">=</span> <span class="st">"hi"</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(greeeting)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> greeeting</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The resulting task would contain a <code>PythonOperator</code> with the task id <code>hi</code>.</p>
 <p>The Frontmatter of our Python file is also encased in a set of triple dashes (<code>---</code>), but you will also note that the entirety of the Frontmatter, including the triple dashes, are prefixed by comment hashes (<code>#</code>).</p>
 <p>By default, gusty will specify specify Airflow’s <a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/operators/python/index.html#airflow.operators.python.PythonOperator">PythonOperator</a> as the <code>operator</code>, if no <code>operator</code> argument is provided. As with any Task Definition File, you can specify whatever <code>operator</code> is available to you in your Airflow environment, so you could just as easily add <code>operator: airflow.operators.python.PythonVirtualenvOperator</code> to this Frontmatter to use the <code>PythonVirtualenvOperator</code> instead of the <code>PythonOperator</code>.</p>
