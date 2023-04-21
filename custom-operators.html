@@ -308,8 +308,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3 class="anchored" data-anchor-id="how-it-works">How It Works</h3>
 <ol type="1">
 <li><p>In gusty, the task name is the file name.</p></li>
-<li><p>gusty (optionally) makes available to your custom operators a <code>task_id</code>, which is the file name. Just specify <code>task_id</code> as an argument in the operator’s <code>__init__</code> method, and gusty will pass it in when building your task.</p></li>
-<li><p>If you name your SQL tables after the <code>task_id</code>, you can detect table names, which in turn can be used as a list of dependencies.</p></li>
+<li><p>gusty (optionally) makes available to your custom operators a <code>task_id</code>, which is the task name. Just specify <code>task_id</code> as an argument in the operator’s <code>__init__</code> method, and gusty will pass it in when building your task.</p></li>
+<li><p>If you name your SQL tables after the <code>task_id</code>, you can detect table names in your SQL, which in turn can be leveraged as a list of dependencies.</p></li>
 <li><p>If you attach this list of dependencies as an attribute on your custom operator, gusty automatically wires up these dependencies for you.</p></li>
 </ol>
 <p>Let’s make an example custom SQL operator that takes advantage of this.</p>
@@ -402,6 +402,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> app_data.users</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> <span class="dt">DATE</span>(created_at) <span class="op">=</span> <span class="fu">CURRENT_DATE</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>In our Airflow DAG graph, the <code>new_users</code> task now automatically depends on the <code>users</code> task!</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="media/images/custom-operators/auto-deps.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </section>
 </section>
 </section>
