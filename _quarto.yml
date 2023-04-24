@@ -6,10 +6,10 @@ book:
   favicon: media/logo/favicon.png
   navbar:
     pinned: TRUE
-    left: 
+    left:
       - icon: github
-        href: https://github.com/pipeline-tools/gusty
-  sidebar: 
+        href: "https://github.com/pipeline-tools/gusty"
+  sidebar:
     logo: media/logo/logo_500.svg
   chapters:
     - index.qmd
