@@ -8,7 +8,7 @@ book:
     pinned: TRUE
     left: 
       - icon: github
-        href: https://github.com/chriscardillo/gusty
+        href: https://github.com/pipeline-tools/gusty
   sidebar: 
     logo: media/logo/logo_500.svg
   chapters:

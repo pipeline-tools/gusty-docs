@@ -78,7 +78,7 @@ Put a YAML block at the top of your notebook and specify an `operator` that rend
 
 ### Example
 
-See the [gusty demo Jupyter Notebook Example](https://github.com/chriscardillo/gusty-demo/blob/main/airflow/dags/stock_predictions/stock_data.ipynb) and sample [JupyterOperator](https://github.com/chriscardillo/gusty-demo/blob/main/airflow/operators/jupyter_operator.py).
+See the [gusty demo Jupyter Notebook Example](https://github.com/pipeline-tools/gusty-demo/blob/main/airflow/dags/stock_predictions/stock_data.ipynb) and sample [JupyterOperator](https://github.com/pipeline-tools/gusty-demo/blob/main/airflow/operators/jupyter_operator.py).
 
 ## `.Rmd`
 
@@ -88,4 +88,4 @@ Use the YAML block at the top of your notebook and specify an `operator` that re
 
 ### Example
 
-See the [gusty demo Rmd Example](https://github.com/chriscardillo/gusty-demo/blob/main/airflow/dags/stock_predictions/model_predictions.Rmd) and sample [RmdOperator](https://github.com/chriscardillo/gusty-demo/blob/main/airflow/operators/rmd_operator.py).
+See the [gusty demo Rmd Example](https://github.com/pipeline-tools/gusty-demo/blob/main/airflow/dags/stock_predictions/model_predictions.Rmd) and sample [RmdOperator](https://github.com/pipeline-tools/gusty-demo/blob/main/airflow/operators/rmd_operator.py).

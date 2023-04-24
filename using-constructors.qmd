@@ -73,4 +73,4 @@ There are a few built-in constructors gusty contains, primarily to make creating
 
 The YAML loading functionality for gusty is maintained in a separate, lightweight project called [ABSQL](https://pypi.org/project/ABSQL/).
 
-The ABSQL package ships with a handful of [default functions](https://github.com/chriscardillo/absql#default-functions), which are also available to you as both YAML constructors and macros within gusty DAGs.
+The ABSQL package ships with a handful of [default functions](https://github.com/pipeline-tools/absql#default-functions), which are also available to you as both YAML constructors and macros within gusty DAGs.

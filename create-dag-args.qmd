@@ -99,7 +99,7 @@ parse_hooks={
 }
 ```
 
-See gusty's built-in parsers [here](https://github.com/chriscardillo/gusty/blob/main/gusty/parsing/parsers.py). 
+See gusty's built-in parsers [here](https://github.com/pipeline-tools/gusty/blob/main/gusty/parsing/parsers.py). 
 
 ### `ignore_subfolders`
 

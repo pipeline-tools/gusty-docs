@@ -5,6 +5,6 @@ number-depth: 2
 
 There are a few example projects which utilize gusty if you want to try it out.
 
-- **[gusty-demo](https://github.com/chriscardillo/gusty-demo)** - This project includes examples of using custom operators, multiple programming languages, and file formats to make (bad) stock predictions.
+- **[gusty-demo](https://github.com/pipeline-tools/gusty-demo)** - This project includes examples of using custom operators, multiple programming languages, and file formats to make (bad) stock predictions.
 
-- **[gusty-demo-lite](https://github.com/chriscardillo/gusty-demo-lite)** - This project includes just enough to get up and runninng.
+- **[gusty-demo-lite](https://github.com/pipeline-tools/gusty-demo-lite)** - This project includes just enough to get up and runninng.
