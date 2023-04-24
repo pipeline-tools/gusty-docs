@@ -69,7 +69,8 @@ class CustomPostgresOperator(PostgresOperator):
             task_id,
             schema,
             sql,
-            postgres_conn_id = "postgres_default",
+            postgres_conn_id="postgres_default",
+            params=None,
             **kwargs):
         
         # gusty uses self.dependencies to create task dependencies
@@ -84,6 +85,7 @@ class CustomPostgresOperator(PostgresOperator):
             task_id = task_id,
             sql = create_sql,
             postgres_conn_id = postgres_conn_id,
+            params=params,
             **kwargs)
 ```
 
