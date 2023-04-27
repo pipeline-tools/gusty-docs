@@ -1,5 +1,5 @@
 ---
-pagetitle: gusty Documentation
+pagetitle: gusty
 ---
 
 # Preface {.unnumbered}
