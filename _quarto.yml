@@ -2,7 +2,7 @@ project:
   type: book
 
 book:
-  title: "gusty Documentation"
+  title: ""
   favicon: media/logo/favicon.png
   navbar:
     pinned: TRUE
