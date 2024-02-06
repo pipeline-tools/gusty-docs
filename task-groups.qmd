@@ -100,3 +100,10 @@ Task groups folders serve a few powerful purposes at scale:
 
 - They can help keep dependencies between sets of tasks easier to manage.
 
+## Ignoring Subfolders
+
+Sometimes you want gusty to disregard subfolders when creating a DAG. For this, there are two options.
+
+If you want to ignore all subfolders, you can add `ignore_subfolders=True` as an argument to `create_dag`.
+
+If you only want to ignore some subfolders, you can add a file called `.gustyignore` to those the subfolders you would like ignored.

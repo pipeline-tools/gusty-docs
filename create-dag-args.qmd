@@ -105,6 +105,8 @@ See gusty's built-in parsers [here](https://github.com/pipeline-tools/gusty/blob
 
 Will disable the creation of task groups from subfolders when set to `True`.
 
+(Note that if you only want to ignore some subfolders, you can add a file called `.gustyignore` to those the subfolders you would like ignored.)
+
 ### `render_on_create`
 
 Disabled by default. If you want any Jinja in your spec to rendered on creation, set to `True`. Note that this will process everything every time the DAG is processed, which by default in Airflow is every few minutes. In general you don't want this on.
