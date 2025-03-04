@@ -85,13 +85,13 @@ Here are the contents of our `hey.sql` file:
 
 ```sql
 ---
-operator: airflow.providers.sqlite.operators.sqlite.SqliteOperator
+operator: airflow.providers.common.sql.operators.sql.SQLExecuteQueryOperator
 ---
 
 SELECT 'hey'
 ```
 
-The resulting task would contain a `SqliteOperator` with the task id `hey`.
+The resulting task would contain a `SQLExecuteQueryOperator` with the task id `hey`.
 
 The Frontmatter of our SQL file is encased in a set of triple dashes (`---`). The Body of the file is everything below the second set of triple dashes. For SQL files, the Body of the file is passed to the `sql` argument of the underlying operator. In this case, `SELECT 'hey'` would be passed to the `sql` argument.
 

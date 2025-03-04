@@ -64,7 +64,7 @@ Declare an `operator` in a YAML header, then write SQL in the main .sql file. Th
 
 ```sql
 ---
-operator: airflow.providers.sqlite.operators.sqlite.SqliteOperator
+operator: airflow.providers.common.sql.operators.sql.SQLExecuteQueryOperator
 ---
 
 SELECT 'hello world'
